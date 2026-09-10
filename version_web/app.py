@@ -23,7 +23,8 @@ QUERY_HASH = "bc3296d1ce80a24b1b6e40b1e72903f5"
 app = Flask(
     __name__,
     template_folder=str(BASE_DIR / "templates"),
-    static_folder=str(BASE_DIR / "static"),
+    static_folder=str(BASE_DIR / "public" / "static"),
+    static_url_path="/static",
 )
 status_lock = Lock()
 
