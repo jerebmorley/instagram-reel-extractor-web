@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extractor de comentarios de reels</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <main class="container">
+      <section class="hero">
+        <div class="badge">Paso a paso</div>
+        <h1>Extractor de comentarios de reels</h1>
+        <p>
+          Iniciá sesión, pegá el enlace del reel, extraé los comentarios y descargá
+          el archivo CSV listo para analizar.
+        </p>
+      </section>
+
+      <section class="steps" aria-label="Flujo de trabajo">
+        <article class="step current" data-step="login">
+          <span>1</span>
+          <div>
+            <h3>Iniciar sesión</h3>
+            <p>Ingresá tu cuenta de Instagram.</p>
+          </div>
+        </article>
+
+        <article class="step pending" data-step="validation">
+          <span>2</span>
+          <div>
+            <h3>Validar reel</h3>
+            <p>Comprobá que la URL sea correcta.</p>
+          </div>
+        </article>
+
+        <article class="step pending" data-step="extracting">
+          <span>3</span>
+          <div>
+            <h3>Extraer comentarios</h3>
+            <p>La app descarga la información y arma el CSV.</p>
+          </div>
+        </article>
+      </section>
+
+      <section id="progress-card" class="panel progress-panel hidden" aria-live="polite">
+        <div class="progress-header">
+          <strong id="progress-status">Esperando</strong>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progress-bar" class="progress-fill"></div>
+        </div>
+        <p id="progress-message" class="progress-message">Listo para iniciar.</p>
+      </section>
+
+      <div id="alert-box" class="alert hidden"></div>
+
+      <form id="extract-form" class="panel" method="post">
+        <div class="field-group">
+          <label for="username">Usuario de Instagram</label>
+          <input id="username" name="username" type="text" placeholder="tu_usuario" required />
+        </div>
+
+        <div class="field-group">
+          <label for="password">Contraseña</label>
+          <input id="password" name="password" type="password" placeholder="••••••••" required />
+        </div>
+
+        <div class="field-group">
+          <label for="reel_url">URL del reel</label>
+          <input
+            id="reel_url"
+            name="reel_url"
+            type="url"
+            placeholder="https://www.instagram.com/reel/XXXXXXXXXXX/"
+            required
+          />
+        </div>
+
+        <button id="submit-button" type="submit">Extraer comentarios</button>
+      </form>
+
+      <section id="results-card" class="download-box hidden">
+        <div>
+          <p>Archivo generado</p>
+          <strong id="result-file-name">-</strong>
+        </div>
+        <div class="download-actions">
+          <span id="result-total">0 comentarios</span>
+          <a id="download-link" class="download-button" href="#" download>Descargar CSV</a>
+        </div>
+      </section>
+
+      <section class="history-box panel">
+        <div class="history-header">
+          <h2>Historial de exportaciones</h2>
+        </div>
+        <ul id="history-list" class="history-list">
+          {% for item in history %}
+          <li>
+            <div>
+              <strong>{{ item.shortcode }}</strong>
+              <small>{{ item.timestamp }}</small>
+            </div>
+            <span>{{ item.total }} comentarios</span>
+          </li>
+          {% else %}
+          <li class="empty-state">Todavía no realizaste ninguna extracción.</li>
+          {% endfor %}
+        </ul>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
