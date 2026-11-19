@@ -34,6 +34,14 @@ Luego abrí tu navegador en:
 http://localhost:5000
 ```
 
+Al ejecutar `python app.py`, el servidor escucha en `127.0.0.1:5000`:
+solo acepta conexiones locales de esta computadora. No permite el acceso
+directo desde otro dispositivo de la red, como un celular conectado al mismo wifi.
+El modo debug está desactivado, por lo que no se habilitan el depurador ni la
+recarga automática de desarrollo; reiniciá el proceso para aplicar cambios.
+Esta configuración corresponde al arranque directo con `python app.py`; no
+configura otros lanzadores ni el despliegue en Vercel descrito abajo.
+
 ## Preparación para Vercel
 
 La estructura ya fue adaptada para un despliegue serverless:

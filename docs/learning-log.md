@@ -52,7 +52,36 @@ Fecha: 2026-11-19.
   versionado actual e historial. La comprensión de `.gitignore` queda por revisar.
 - Qué todavía me genera dudas: pendiente de respuesta del usuario.
 - Pregunta de cierre: ¿por qué agregar `venv/` a `.gitignore` no era suficiente?
-- Próximo paso: incremento 02; aún no iniciado.
+- Respuesta posterior del usuario: sin `--cached`, `git rm` habría borrado los
+  archivos versionados de `venv/` también de la computadora.
+- Próximo paso al cerrar esta etapa: incremento 02.
+
+## Incremento 02 — Restringir el servidor legado a uso local
+
+Fecha: 2026-11-19.
+
+- Qué intentaba resolver: limitar el servidor Flask del prototipo al equipo del
+  operador y desactivar las herramientas de debug durante esta transición.
+- Qué creía que iba a pasar (usuario): inicialmente interpretó que pasar a
+  `127.0.0.1` permitiría acceder también desde el celular.
+- Aclaración conversada: `0.0.0.0` escucha en todas las interfaces IPv4, lo que
+  permite acceso desde la red si el firewall lo admite; `127.0.0.1` es la
+  dirección de loopback del propio dispositivo y limita el acceso directo al
+  equipo local. `localhost` en el celular se refiere al propio celular.
+- Qué puedo explicar ahora: tras la explicación, el usuario identificó
+  correctamente `0.0.0.0` como la opción para escuchar desde otros dispositivos.
+- Qué cambió: `app.run` usa `debug=False` y `host="127.0.0.1"`; el README
+  documenta el acceso local, el reinicio manual y el alcance del arranque directo.
+- Cómo lo comprobé: compilación en memoria de `app.py` sin errores de sintaxis;
+  ejecución aislada del bloque principal con un sustituto de `app.run`, que
+  confirmó host, debug, puerto e hilos esperados. `git diff --check` pasó sin
+  errores. No se inició un servidor real ni se escribió el archivo de estado.
+- Límites: no se prueba extracción ni autenticación con Instagram. Este cambio
+  configura `python app.py`, no otros lanzadores ni despliegues existentes.
+- Qué todavía me genera dudas: pendiente de respuesta del usuario.
+- Pregunta de cierre: con debug desactivado, ¿qué harías después de modificar
+  el código para que el servidor que ya está ejecutándose use esos cambios?
+- Próximo paso: incremento 03; aún no iniciado.
 
 ## Plantilla para el siguiente incremento
 
