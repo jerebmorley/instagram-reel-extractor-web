@@ -164,7 +164,11 @@ Fecha: 2026-11-20.
   trabajo a diez minutos. Se omite caché para comprobar instalaciones nuevas.
 - Verificación local: `make install test` pasó en Python 3.14.3; lint, formato y
   la prueba de instalación siguen correctos. `git diff --check` pasó sin errores.
-- Verificación remota: pendiente de la primera ejecución después del push.
+- Verificación remota: el commit `e4c8d11` pasó en las cinco versiones de Python.
+  Se confirmaron los pasos de instalación y comprobación en cada trabajo de la
+  [primera ejecución de CI](https://github.com/jerebmorley/instagram-reel-extractor-web/actions/runs/44822820974).
+  La evidencia se registra en un commit documental posterior para conservar
+  intacto el commit ya verificado por GitHub Actions.
 - Límites: CI valida las comprobaciones existentes; no valida funcionalidades
   de negocio aún no implementadas y no configura protecciones de rama.
 - Próximo paso: incremento 06, decisiones de arquitectura (ADR).
