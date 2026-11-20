@@ -7,3 +7,8 @@ __pycache__/
 exports/
 *.csv
 .history
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/

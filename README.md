@@ -5,10 +5,9 @@ locales desde la computadora del operador.
 
 ## Estado actual
 
-Completado el incremento 03: se retiraron el extractor anterior, la interfaz Flask
-y sus dependencias. **Todavía no hay una aplicación ejecutable ni instrucciones
-de instalación para la nueva v1.** El siguiente incremento crea el paquete Python
-`src/sorteos` y las herramientas de comprobación local.
+Completado el incremento 04: existe el paquete instalable `sorteos` en
+`src/sorteos`, con pytest, Ruff y comprobaciones locales. **Todavía no hay CLI,
+interfaz ni funciones de extracción o sorteo.** El siguiente incremento incorpora CI.
 
 El prototipo solicitaba contraseñas de Instagram. La nueva arquitectura prevé
 fuentes autorizadas, acceso mediante token y un modo archivo con datos sintéticos.
@@ -23,6 +22,47 @@ implementar esa integración.
 - Sorteo reproducible, acta verificable y exportación de resultados.
 
 Estas capacidades son objetivos del roadmap, no funciones ya disponibles.
+
+## Preparar el entorno de desarrollo
+
+Requisitos: Python 3.10 o posterior, [uv](https://docs.astral.sh/uv/getting-started/installation/)
+y Make. Desde la raíz del repositorio:
+
+```bash
+make install
+make test
+```
+
+`make install` ejecuta `uv sync --locked`: crea el entorno `.venv`, instala el
+paquete en modo editable y las herramientas de desarrollo usando `uv.lock`.
+La primera instalación necesita acceso al índice de paquetes. No hace falta
+activar el entorno: `uv run` elige su intérprete. El antiguo `venv/` es independiente.
+
+`make test` ejecuta Ruff para detectar errores e imports desordenados, comprueba
+el formato sin modificar archivos y ejecuta pytest. La prueba inicial importa el
+paquete desde una carpeta temporal, con Python aislado de `PYTHONPATH` y del
+directorio actual. Comprueba la instalación; no valida reglas de sorteos todavía.
+
+Sin Make, los comandos equivalentes son:
+
+```bash
+uv sync --locked
+uv run --locked ruff check src tests
+uv run --locked ruff format --check src tests
+uv run --locked pytest
+```
+
+La configuración está en `pyproject.toml`; `uv.lock` registra las versiones
+resueltas. Al cambiar dependencias, regenerá el lock con `uv lock` y revisá su diff.
+El nombre de distribución es `sorteos-ig`, y el nombre usado en Python es `sorteos`:
+
+```bash
+uv run --locked python -c "import sorteos; print(sorteos.__file__)"
+```
+
+Referencias de configuración: [empaquetado Python](https://packaging.python.org/en/latest/tutorials/packaging-projects/),
+[prácticas de pytest](https://docs.pytest.org/en/stable/explanation/goodpractices.html)
+y [configuración de Ruff](https://docs.astral.sh/ruff/configuration/).
 
 ## Documentación
 

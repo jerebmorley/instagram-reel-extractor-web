@@ -115,6 +115,37 @@ Fecha: 2026-11-20.
   no elimina despliegues remotos existentes ni archivos ignorados del operador.
 - Próximo paso: incremento 04, paquete Python y herramientas locales.
 
+## Incremento 04 — Paquete Python y herramientas locales
+
+Fecha: 2026-11-20.
+
+- Objetivo: disponer de una base instalable y un comando único de comprobación
+  antes de implementar reglas o acceso a datos.
+- Estructura: `src/sorteos` separa el paquete del repositorio; la distribución
+  se llama `sorteos-ig` y se importa como `sorteos`. Se usa versión de desarrollo
+  `0.1.0.dev0` porque todavía no existe la funcionalidad de la v1.
+- Configuración: `pyproject.toml` centraliza metadatos, Hatchling como constructor,
+  pytest y Ruff. Se conserva Python >=3.10 como mínimo declarado. No hay
+  dependencias de ejecución; pytest y Ruff pertenecen al grupo de desarrollo.
+- Instalación: uv crea `.venv` y fija las dependencias resueltas en `uv.lock`.
+  `--locked` evita actualizar silenciosamente ese archivo. Los requisitos del
+  constructor se resuelven aparte en el entorno de construcción aislado.
+- Comprobaciones: `make test` ejecuta lint, comprobación de formato sin edición
+  y pytest. Se incluyen reglas para imports ordenados. No se crean módulos
+  vacíos de negocio ni pruebas de funcionalidades aún inexistentes.
+- Prueba inicial: ejecuta Python con `-I` desde una carpeta temporal para importar
+  `sorteos` y leer sus metadatos instalados sin depender del directorio actual
+  ni de `PYTHONPATH`. Detecta errores de instalación y descubrimiento del paquete.
+- Evidencia: `make install test` creó un entorno nuevo y pasó con Python 3.14.3,
+  pytest 9.2.0 y Ruff 0.17.6: lint correcto, dos archivos con formato correcto y
+  una prueba aprobada. `uv build --wheel --offline` creó el wheel; instalado sin
+  dependencias en otro entorno temporal limpio, se importó fuera del repositorio.
+- Documentación: README con requisitos, comandos y referencias oficiales;
+  `.gitignore` excluye cachés, artefactos de construcción y metadatos generados.
+- Límites: la prueba valida empaquetado, no extracción ni sorteos. Otras versiones
+  de Python no se ejecutaron en este incremento; se evaluarán en CI.
+- Próximo paso: incremento 05, automatizar las comprobaciones en CI.
+
 ## Plantilla para el siguiente incremento
 
 ```markdown
