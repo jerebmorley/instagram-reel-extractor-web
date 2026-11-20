@@ -146,6 +146,29 @@ Fecha: 2026-11-20.
   de Python no se ejecutaron en este incremento; se evaluarán en CI.
 - Próximo paso: incremento 05, automatizar las comprobaciones en CI.
 
+## Incremento 05 — Integración continua
+
+Fecha: 2026-11-20.
+
+- Objetivo: repetir automáticamente las comprobaciones locales en GitHub y
+  comprobar la compatibilidad declarada en varias versiones de Python.
+- Workflow: `.github/workflows/ci.yml` se activa con push a main, pull requests
+  hacia main y ejecución manual. Ejecuta `make install` y `make test`, evitando
+  mantener comandos distintos en la computadora del operador y en CI.
+- Matriz: Python 3.10 a 3.14 sobre Ubuntu 24.04, con entornos separados y
+  `fail-fast: false` para observar cada resultado aunque falle otra versión.
+- Reproducibilidad: uv 0.11.2, dependencias del lock y acciones fijadas por SHA;
+  los SHA se verificaron contra los tags oficiales de checkout y setup-uv.
+- Operación: permisos de lectura, sin credenciales de Instagram ni despliegues.
+  Se cancelan ejecuciones anteriores de la misma referencia y se limita cada
+  trabajo a diez minutos. Se omite caché para comprobar instalaciones nuevas.
+- Verificación local: `make install test` pasó en Python 3.14.3; lint, formato y
+  la prueba de instalación siguen correctos. `git diff --check` pasó sin errores.
+- Verificación remota: pendiente de la primera ejecución después del push.
+- Límites: CI valida las comprobaciones existentes; no valida funcionalidades
+  de negocio aún no implementadas y no configura protecciones de rama.
+- Próximo paso: incremento 06, decisiones de arquitectura (ADR).
+
 ## Plantilla para el siguiente incremento
 
 ```markdown

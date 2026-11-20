@@ -5,9 +5,9 @@ locales desde la computadora del operador.
 
 ## Estado actual
 
-Completado el incremento 04: existe el paquete instalable `sorteos` en
-`src/sorteos`, con pytest, Ruff y comprobaciones locales. **Todavía no hay CLI,
-interfaz ni funciones de extracción o sorteo.** El siguiente incremento incorpora CI.
+El paquete instalable `sorteos` está en `src/sorteos`, con pytest, Ruff y
+comprobaciones locales. El incremento 05 agrega su automatización en GitHub
+Actions. **Todavía no hay CLI, interfaz ni funciones de extracción o sorteo.**
 
 El prototipo solicitaba contraseñas de Instagram. La nueva arquitectura prevé
 fuentes autorizadas, acceso mediante token y un modo archivo con datos sintéticos.
@@ -63,6 +63,29 @@ uv run --locked python -c "import sorteos; print(sorteos.__file__)"
 Referencias de configuración: [empaquetado Python](https://packaging.python.org/en/latest/tutorials/packaging-projects/),
 [prácticas de pytest](https://docs.pytest.org/en/stable/explanation/goodpractices.html)
 y [configuración de Ruff](https://docs.astral.sh/ruff/configuration/).
+
+## Integración continua (CI)
+
+[El workflow de CI](.github/workflows/ci.yml) ejecuta `make install` y `make test`
+en Ubuntu 24.04 para Python 3.10, 3.11, 3.12, 3.13 y 3.14. Se activa al subir
+commits a `main`, al abrir o actualizar un pull request hacia `main`, o manualmente
+desde [GitHub Actions](https://github.com/jerebmorley/instagram-reel-extractor-web/actions/workflows/ci.yml).
+
+Cada versión usa un entorno separado. Un fallo no cancela las otras versiones,
+para mostrar todos los problemas de compatibilidad. Una ejecución nueva en la
+misma rama reemplaza la anterior; cada trabajo tiene un límite de diez minutos.
+
+CI usa los mismos comandos que el desarrollo local y el lock existente; fija uv
+en 0.11.2 y las acciones externas por su commit. Solo requiere permisos de lectura
+del repositorio. No necesita credenciales de Instagram ni publica la aplicación.
+No se configura caché inicialmente: el entorno pequeño permite comprobar la
+instalación desde cero en cada ejecución.
+
+Un resultado verde indica que pasaron las comprobaciones actuales de estilo e
+instalación. No garantiza funcionalidades futuras ni bloquea por sí solo un push
+a `main`; las protecciones de rama se configuran por separado.
+
+Referencia: [integración oficial de uv con GitHub Actions](https://docs.astral.sh/uv/guides/integration/github/).
 
 ## Documentación
 
