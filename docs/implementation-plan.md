@@ -8,12 +8,12 @@ Cada fila propone un commit con un objetivo verificable. Si resulta grande para
 entender su diff, dividirla antes de implementar. Las diez semanas del roadmap
 son orientativas: el avance depende de la evidencia y del aprendizaje.
 
-Ciclo: concepto → predicción del usuario → aviso de acciones → implementación →
-verificación → lectura del diff → learning-log y commit → pausa de aprendizaje.
+Ciclo vigente desde el 2026-11-20: concepto y fundamento → aviso de acciones →
+implementación → verificación → explicación del diff → learning-log y commit.
 
-Las predicciones se responden antes del cambio técnico; las preguntas de cierre,
-después. Una respuesta breve o incompleta sirve. El usuario puede optar por omitir
-el ejercicio. La IA no debe inventar sus respuestas ni su comprensión.
+Por preferencia explícita del usuario, implementar sin preguntas de predicción ni
+cuestionarios de cierre. Mantener explicaciones de cada decisión y evidencia de
+los resultados, sin atribuir al usuario comprensión no expresada.
 
 ## Estado inicial observado
 
@@ -125,15 +125,15 @@ principal. Recortar según el orden del roadmap si falta tiempo.
 | 39 | `docs: registrar retrospectiva anonimizada del piloto` | Registrar evidencia del recorrido real y mejoras sin versionar datos personales. |
 | 40 | `docs: publicar instrucciones de instalación y demo` | Otra persona instala y completa demo sintética desde README; incluir demostración visual. |
 
-## Preguntas de cierre de cada incremento
+## Contenido de la explicación de cierre
 
 1. ¿Qué problema resolvimos?
 2. ¿Por qué elegimos esta solución?
 3. ¿Qué evidencia tenemos de que funciona?
 4. ¿Qué todavía no resuelve?
 
-Alternar explicaciones con ejercicios pequeños del usuario: agregar un caso de
-prueba, interpretar un error o modificar una regla.
+La IA explica estos puntos directamente; no requiere respuestas ni ejercicios del
+usuario para completar el incremento.
 
 ## Relación con el roadmap original
 

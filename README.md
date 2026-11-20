@@ -1,100 +1,46 @@
-# Instagram Reel Comment Extractor
+# Sorteos de Instagram — v1 local
 
-Este proyecto permite iniciar sesión en Instagram, pegar la URL de un reel y exportar los comentarios a un archivo CSV. El flujo está pensado como una app de consola guiada (fase 1), con una estructura lista para evolucionar hacia una interfaz web más adelante.
+Herramienta en construcción para operar sorteos de pequeñas cuentas y negocios
+locales desde la computadora del operador.
 
-## Requisitos
+## Estado actual
 
-- Python 3.10 o superior
-- Acceso a Instagram con una cuenta real
-- Navegador web habilitado para la sesión del cliente (la autenticación se realiza mediante `instaloader` en modo cliente)
+Completado el incremento 03: se retiraron el extractor anterior, la interfaz Flask
+y sus dependencias. **Todavía no hay una aplicación ejecutable ni instrucciones
+de instalación para la nueva v1.** El siguiente incremento crea el paquete Python
+`src/sorteos` y las herramientas de comprobación local.
 
-## Instalación
+El prototipo solicitaba contraseñas de Instagram. La nueva arquitectura prevé
+fuentes autorizadas, acceso mediante token y un modo archivo con datos sintéticos.
+La disponibilidad y los requisitos del acceso real se verificarán antes de
+implementar esa integración.
 
-1. Cloná el repositorio o descargá este proyecto.
-2. Creá un entorno virtual y activalo:
+## Alcance previsto
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-```
+- Operación local asistida, sin hosting, cuentas de usuario ni pagos.
+- Núcleo Python compartido por CLI y Streamlit, con SQLite para persistencia.
+- Extracción reanudable, reglas de participación y revisión con registro.
+- Sorteo reproducible, acta verificable y exportación de resultados.
 
-3. Instalá las dependencias:
+Estas capacidades son objetivos del roadmap, no funciones ya disponibles.
 
-```bash
-pip install -r requirements.txt
-```
+## Documentación
 
-## Uso
+- [Roadmap original](docs/ROADMAP.md): alcance y etapas de la v1.
+- [Plan de implementación](docs/implementation-plan.md): commits y criterios de cierre.
+- [Registro de aprendizaje](docs/learning-log.md): decisiones y evidencia.
+- [Instrucciones para la IA](AGENTS.md): método de colaboración.
 
-### Modo interactivo
+## Historial del prototipo
 
-Ejecutá:
-
-```bash
-python extraerComentariosReels.py
-```
-
-El programa te pedirá:
-
-1. Usuario de Instagram
-2. Contraseña
-3. URL del reel
-4. Confirmación del destino del CSV
-
-Luego comienzan los pasos:
-
-- iniciar sesión y guardar la sesión local
-- validar la URL del reel
-- extraer los comentarios con la API GraphQL de Instagram
-- guardar cada comentario con el formato:
-  - id
-  - username
-  - text
-  - created_at
-  - likes_count
-
-### Modo no interactivo
-
-También podés suministrar parámetros directamente:
+El último commit que contiene el prototipo es `d49aeb7`. Se puede consultar sin
+restaurarlo ni modificar la carpeta de trabajo:
 
 ```bash
-python extraerComentariosReels.py --username tu_usuario --password tu_contrasena --reel-url "https://www.instagram.com/reel/XXXXXXXXXXX/"
+git show d49aeb7:extraerComentariosReels.py
+git show d49aeb7:version_web/app.py
 ```
 
-Opcionalmente podés definir la ruta de salida:
-
-```bash
-python extraerComentariosReels.py --username tu_usuario --password tu_contrasena --reel-url "https://www.instagram.com/reel/XXXXXXXXXXX/" --output exports/comentarios.csv
-```
-
-## Estructura esperada
-
-Los archivos generados se guardan en la carpeta `exports`:
-
-```text
-exports/
-└── comentarios_Dct0o7mpcsk.csv
-```
-
-## Importante
-
-- El programa guarda la sesión localmente para evitar repetir el login en ejecuciones futuras.
-- Instagram puede bloquear o limitar peticiones por uso intensivo o rate limiting.
-- Este proyecto está orientado a casos legales y de uso responsable, con fines de análisis de contenido del que tenés acceso autorizado.
-- Respetá los términos de servicio y la privacidad de la cuenta.
-
-## Siguientes pasos
-
-La próxima evolución sugerida es convertir esta lógica en una página web con:
-
-- pantalla de login guiada
-- campo para pegar el enlace del reel
-- resumen de la extracción paso a paso
-- vista del archivo CSV descargado
-- historial de ejecuciones
-
-## Troubleshooting
-
-- Si la sesión falla: elimina la sesión guardada y vuelve a iniciar sesión.
-- Si la URL no es válida: asegurate de usar una URL del tipo `https://www.instagram.com/reel/XXXXXXXXXXX/`.
-- Si Instagram devuelve error 429: espera unos segundos y vuelve a intentar.
+La retirada no desinstala paquetes del entorno virtual local ni elimina archivos
+locales ignorados o no versionados. Los entornos virtuales, credenciales y datos
+reales no deben incorporarse al repositorio.

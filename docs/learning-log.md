@@ -1,7 +1,8 @@
 # Registro de aprendizaje
 
-Registrar evidencia y respuestas reales. Dejar pendiente lo que el usuario aún
-no respondió; no confundir un cambio terminado con un concepto comprendido.
+Registrar decisiones, fundamentos y evidencia. Desde el 2026-11-20 se implementa
+sin preguntas ni ejercicios obligatorios, por preferencia del usuario. Las
+respuestas históricas se conservan; no confundir cambios con comprensión demostrada.
 
 ## Incremento 00 — Plan y método de trabajo
 
@@ -81,7 +82,38 @@ Fecha: 2026-11-19.
 - Qué todavía me genera dudas: pendiente de respuesta del usuario.
 - Pregunta de cierre: con debug desactivado, ¿qué harías después de modificar
   el código para que el servidor que ya está ejecutándose use esos cambios?
-- Próximo paso: incremento 03; aún no iniciado.
+- Aclaración posterior: el usuario propuso hacer push para cargar los cambios;
+  se explicó que push actualiza GitHub y que el servidor local se reinicia con
+  `Ctrl+C` y `python app.py`. El commit 02 fue subido a main.
+- Próximo paso al cerrar esta etapa: incremento 03.
+
+## Incremento 03 — Retirar el prototipo anterior
+
+Fecha: 2026-11-20.
+
+- Objetivo: retirar los flujos que solicitan contraseñas antes de construir el
+  núcleo local basado en fuentes autorizadas.
+- Decisión: eliminar el extractor y los archivos versionados de `version_web`,
+  incluidos interfaz, estado de ejemplo y configuración de despliegue; todos
+  pertenecían al flujo anterior y mantenerlos dejaría puntos de entrada obsoletos.
+- Dependencias: retirar ambos `requirements.txt`; Flask, instaloader y requests
+  solo eran utilizados por el prototipo. Las dependencias del nuevo núcleo se
+  declararán cuando se necesiten, sin desinstalar el entorno local existente.
+- Documentación: reemplazar las instrucciones obsoletas del README por el estado
+  real de transición y referencias al plan. El commit `d49aeb7` conserva el
+  prototipo para consulta sin restaurarlo en la carpeta de trabajo.
+- Método: actualizar AGENTS.md y el plan para implementar directamente, sin
+  cuestionarios, manteniendo fundamentos y verificaciones. Se conserva el
+  roadmap original como documento de origen.
+- Verificación: se comprobaron los 13 retiros previstos y la ausencia de código
+  Python, JavaScript y HTML versionado restante; los enlaces locales del README
+  resuelven a archivos existentes. `git cat-file -e` confirmó que el extractor y
+  la app anterior siguen en `d49aeb7`; `venv/` permanece local.
+  `git diff --check` pasó sin errores. No se ejecutó la aplicación ni se
+  agregaron pruebas artificiales para esta retirada y sus documentos.
+- Límite: no hay aplicación ejecutable en este punto. Retirar archivos locales
+  no elimina despliegues remotos existentes ni archivos ignorados del operador.
+- Próximo paso: incremento 04, paquete Python y herramientas locales.
 
 ## Plantilla para el siguiente incremento
 
@@ -90,11 +122,10 @@ Fecha: 2026-11-19.
 
 Fecha:
 
-- Qué intentaba resolver:
-- Qué creía que iba a pasar:
-- Qué pasó:
-- Cómo lo comprobé:
-- Qué puedo explicar ahora:
-- Qué todavía me genera dudas:
+- Objetivo:
+- Decisiones y fundamentos:
+- Cambios realizados:
+- Verificación y evidencia:
+- Límites:
 - Próximo paso:
 ```
