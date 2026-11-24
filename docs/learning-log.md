@@ -191,3 +191,7 @@ Fecha:
 ## Incremento 06 — Decisiones de arquitectura (2026-11-24)
 
 Los ADR registran por qué la procedencia de cada conjunto de comentarios debe conservarse y por qué la v1 se operará localmente. Se contrastaron ambas decisiones con las secciones 1 a 3 del roadmap y el alcance del paso 06. Son criterios para revisar futuras implementaciones.
+
+## Incremento 07 — Preparación de la cuenta de prueba (2026-11-24)
+
+La guía reúne el procedimiento del titular y la matriz que completaremos con lecturas reales. Contrastamos la modalidad Instagram Login, el host y los permisos con las referencias oficiales de Meta enlazadas en la guía. Revisamos los enlaces internos del README y el diff de documentación. La configuración en el panel, el vencimiento del token y todas las mediciones siguen pendientes de la prueba con una cuenta autorizada.
