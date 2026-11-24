@@ -243,3 +243,7 @@ FileSource y FixtureSource se recorren como secuencias de Comment. Los identific
 ## Incremento 18 — Snapshot canónico
 
 La CLI ordena por publicación e ID, normaliza los instantes a UTC y escribe un objeto JSON por línea. El hash identifica los bytes del conjunto único. La publicación por enlace de archivo evita sobreescribir un destino concurrente. Si el destino ya existe se comprueba su hash. Se verificaron reordenamiento, duplicados, conflictos y alteración del archivo. Pasaron Ruff y 45 pruebas en Python 3.14.3. La CLI procesó 10.000 comentarios sintéticos con semilla 16 y produjo SHA-256 `5be2a7f17559b2e79a57b71c3c9fbc13f7f8e9dea2e2aded5e45097ea39b4692`. El resumen de origen se emite por consola para conservarlo junto al registro de campaña.
+
+## Incremento 19 — Trabajos SQLite
+
+El comando snapshot registra el origen, el estado y el avance cada cien registros en trabajos.sqlite3 dentro del destino. El cierre guarda el total leído, el total único y el hash en una transacción. La prueba reabrió la base, comprobó WAL y distinguió un trabajo completo de otro interrumpido. Un cierre abrupto del proceso puede dejar el estado activo; la recuperación corresponde al paso 22.

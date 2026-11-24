@@ -9,7 +9,7 @@ from pathlib import Path
 
 from sorteos.credentials import CredentialError, credential_path, load_token, save_token
 from sorteos.graph import Graph, GraphError
-from sorteos.snapshot import write_snapshot
+from sorteos.jobs import run_snapshot
 from sorteos.sources import FileSource, FixtureSource
 
 
@@ -47,12 +47,13 @@ def main():
             else:
                 records = FixtureSource(args.sinteticos, seed)
                 origin = f"sintéticos: cantidad={args.sinteticos}, semilla={seed}"
-            path, count = write_snapshot(records, args.destino)
+            job, path, count = run_snapshot(records, args.destino, origin)
         except (ValueError, OSError, csv.Error) as error:
             parser.exit(1, f"No se pudo crear el snapshot: {error}\n")
         print(
             json.dumps(
                 {
+                    "trabajo": job,
                     "archivo": str(path),
                     "sha256": path.stem,
                     "comentarios": count,
