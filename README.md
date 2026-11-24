@@ -30,7 +30,7 @@ make test
 `make install` ejecuta `uv sync --locked`: crea el entorno `.venv`, instala el
 paquete en modo editable y las herramientas de desarrollo usando `uv.lock`.
 La primera instalación necesita acceso al índice de paquetes. No hace falta
-activar el entorno: `uv run` elige su intérprete. El antiguo `venv/` es independiente.
+activar el entorno: `uv run` elige su intérprete.
 
 `make test` ejecuta Ruff para detectar errores e imports desordenados, comprueba
 el formato sin modificar archivos y ejecuta pytest. La prueba inicial importa el
@@ -102,8 +102,7 @@ git show d49aeb7:extraerComentariosReels.py
 git show d49aeb7:version_web/app.py
 ```
 
-La retirada no desinstala paquetes del entorno virtual local ni elimina archivos
-locales ignorados o no versionados. Los entornos virtuales, credenciales y datos
+El entorno local del proyecto se gestiona en `.venv/`. Los entornos virtuales, credenciales y datos
 reales no deben incorporarse al repositorio.
 
 ## Evaluar una campaña de ejemplo

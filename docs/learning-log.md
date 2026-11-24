@@ -255,3 +255,7 @@ GraphSource transforma cada raíz y respuesta al contrato Comment. Solicita hast
 ## Incremento 21 — Presupuesto y reintentos
 
 Cada petición GET descuenta un intento del presupuesto compartido por el cliente. Los errores de conexión y los HTTP 500, 502, 503 y 504 sin Retry-After admiten hasta tres intentos totales. Un 429 o una indicación Retry-After en esos errores HTTP detiene la operación. Es una política local conservadora; el presupuesto no mide la cuota disponible en Meta. Las pruebas simulan agotamiento, recuperación, error permanente y límite de uso. Ruff, formato y 52 pruebas pasaron con Python 3.14.3. La CLI completó un trabajo de 101 registros sintéticos con hash. Sigue pendiente validar una publicación real y reanudar trabajos desde un cursor persistido.
+
+## Limpieza del entorno del prototipo
+
+Los 3.118 archivos y enlaces del entorno anterior coincidían con la copia histórica de Git. Se eliminó esa instalación local de Python 3.12. El proyecto usa únicamente `.venv/`, sincronizado con `uv.lock`. El intérprete confirmó su ruta y pasaron Ruff, formato y 52 pruebas con Python 3.14.3.
