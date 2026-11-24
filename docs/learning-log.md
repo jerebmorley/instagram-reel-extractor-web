@@ -247,3 +247,7 @@ La CLI ordena por publicación e ID, normaliza los instantes a UTC y escribe un 
 ## Incremento 19 — Trabajos SQLite
 
 El comando snapshot registra el origen, el estado y el avance cada cien registros en trabajos.sqlite3 dentro del destino. El cierre guarda el total leído, el total único y el hash en una transacción. La prueba reabrió la base, comprobó WAL y distinguió un trabajo completo de otro interrumpido. Un cierre abrupto del proceso puede dejar el estado activo; la recuperación corresponde al paso 22.
+
+## Incremento 20 — Recorrido de Graph
+
+GraphSource transforma cada raíz y respuesta al contrato Comment. Solicita hasta 50 registros por página, reconstruye cada petición con el cursor after y conserva el padre de cada respuesta. Dos pruebas sintéticas recorrieron páginas vacías con continuación y detectaron un ciclo de cursores. El tamaño efectivo y los campos devueltos siguen pendientes de medición con la cuenta autorizada. [Paginación según Meta](https://developers.facebook.com/docs/graph-api/results/)

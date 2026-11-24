@@ -4,11 +4,13 @@ import argparse
 import csv
 import json
 import os
+import sqlite3
 from datetime import date
 from pathlib import Path
 
 from sorteos.credentials import CredentialError, credential_path, load_token, save_token
 from sorteos.graph import Graph, GraphError
+from sorteos.graph_source import GraphSource
 from sorteos.jobs import run_snapshot
 from sorteos.sources import FileSource, FixtureSource
 
@@ -31,24 +33,40 @@ def main():
     )
     snapshot = commands.add_parser("snapshot", help="Crear un JSONL canónico local")
     source = snapshot.add_mutually_exclusive_group(required=True)
+    source.add_argument("--publicacion", help="ID de publicación en Graph")
     source.add_argument("--archivo", type=Path)
     source.add_argument("--sinteticos", type=int, metavar="CANTIDAD")
     snapshot.add_argument("--semilla", type=int)
     snapshot.add_argument("--destino", type=Path, default=Path("exports/snapshots"))
     args = parser.parse_args()
     if args.command == "snapshot":
-        if args.archivo and args.semilla is not None:
+        if args.sinteticos is None and args.semilla is not None:
             parser.error("--semilla requiere --sinteticos")
         seed = 16 if args.semilla is None else args.semilla
         try:
-            if args.archivo:
+            if args.publicacion is not None:
+                if not args.version_api:
+                    parser.error("--publicacion requiere --version-api")
+                token = os.getenv("INSTAGRAM_ACCESS_TOKEN") or load_token(
+                    credential_path()
+                )
+                records = GraphSource(Graph(args.version_api, token), args.publicacion)
+                origin = f"Graph {args.version_api}, publicación {args.publicacion}"
+            elif args.archivo:
                 records = FileSource(args.archivo)
                 origin = str(args.archivo)
             else:
                 records = FixtureSource(args.sinteticos, seed)
                 origin = f"sintéticos: cantidad={args.sinteticos}, semilla={seed}"
             job, path, count = run_snapshot(records, args.destino, origin)
-        except (ValueError, OSError, csv.Error) as error:
+        except (
+            GraphError,
+            CredentialError,
+            sqlite3.Error,
+            ValueError,
+            OSError,
+            csv.Error,
+        ) as error:
             parser.exit(1, f"No se pudo crear el snapshot: {error}\n")
         print(
             json.dumps(
