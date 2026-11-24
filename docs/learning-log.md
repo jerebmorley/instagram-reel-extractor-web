@@ -211,3 +211,7 @@ La CLI valida el perfil antes de guardar una credencial. El archivo se reemplaza
 ## Incremento 11 — Contrato del comentario (2026-11-24)
 
 Comment conserva el texto original, los identificadores de comentario y publicación y el instante normalizado a UTC. parent_id enlaza una respuesta con su comentario. El identificador y el nombre del autor pueden faltar independientemente. Esto permite representar la observación antes de aplicar reglas de elegibilidad. Los adaptadores de fuentes se implementarán en sus propios incrementos. Ruff y 14 pruebas pasaron con Python 3.14.3, incluidos el cambio de día al convertir a UTC, autor ausente, fecha ambigua y autorreferencia.
+
+## Incremento 12 — Menciones (2026-11-24)
+
+El parser local admite nombres ASCII de hasta 30 caracteres con puntos internos, letras, números y guion bajo. Quita la puntuación final, compara en minúsculas y conserva la primera aparición de cada cuenta. Son convenciones de campaña para interpretar texto, sin verificar si la cuenta existe. Pasaron cinco casos de tabla con duplicados, correos, URLs, puntuación, longitud y caracteres Unicode parecidos.
