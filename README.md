@@ -113,3 +113,27 @@ Desde la raíz, ejecutá `uv run --locked python scripts/medir_campana.py`. Gene
 en tres publicaciones y muestra el tiempo de la primera evaluación. Después
 regenera los datos y comprueba que la evaluación en orden inverso produce las
 mismas decisiones. La medición excluye la generación y el acceso a Instagram.
+
+## Crear un snapshot local
+
+```bash
+uv run --locked python -m sorteos snapshot --sinteticos 10000 --semilla 16
+uv run --locked python -m sorteos snapshot --archivo campaña.csv
+```
+
+Para importar JSON usá una lista de objetos. Para CSV usá cabecera, comas y
+codificación UTF-8. Ambos requieren `id`, `media_id`, `text` y `created_at`
+(fecha ISO con zona horaria). Los identificadores JSON son cadenas.
+`author_id`, `username` y `parent_id` son opcionales. Ejemplo JSON sintético:
+
+```json
+[{"id":"01","media_id":"m1","text":"@amiga","created_at":"2026-01-01T00:00:00Z"}]
+```
+
+El comando muestra el origen, la cantidad de comentarios únicos, la ruta y el
+SHA-256. Conservá ese resumen con la campaña. Por defecto escribe en
+`exports/snapshots/`, ignorado por Git. Podés elegir otra carpeta con `--destino`.
+El JSONL contiene los datos originales del comentario y representa los instantes
+en UTC. Se ordena por publicación e ID y absorbe repeticiones idénticas.
+Para comprobar el contenido, compará `sha256sum RUTA_DEL_JSONL` con el hash
+registrado. La aplicación reutiliza archivos idénticos y rechaza conflictos.

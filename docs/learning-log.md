@@ -239,3 +239,7 @@ El generador usa un reloj de referencia fijo y una semilla local. La muestra inc
 ## Incremento 17 — Fuentes locales
 
 FileSource y FixtureSource se recorren como secuencias de Comment. Los identificadores se mantienen como cadenas para conservar ceros iniciales. En CSV las celdas opcionales vacías representan ausencia. La validación identifica el registro que incumple el contrato. Cinco pruebas comprobaron equivalencia entre formatos, zonas horarias, texto multilínea, reproducibilidad y rechazo de entradas incompletas.
+
+## Incremento 18 — Snapshot canónico
+
+La CLI ordena por publicación e ID, normaliza los instantes a UTC y escribe un objeto JSON por línea. El hash identifica los bytes del conjunto único. La publicación por enlace de archivo evita sobreescribir un destino concurrente. Si el destino ya existe se comprueba su hash. Se verificaron reordenamiento, duplicados, conflictos y alteración del archivo. Pasaron Ruff y 45 pruebas en Python 3.14.3. La CLI procesó 10.000 comentarios sintéticos con semilla 16 y produjo SHA-256 `5be2a7f17559b2e79a57b71c3c9fbc13f7f8e9dea2e2aded5e45097ea39b4692`. El resumen de origen se emite por consola para conservarlo junto al registro de campaña.
