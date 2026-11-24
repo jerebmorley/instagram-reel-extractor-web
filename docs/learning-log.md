@@ -223,3 +223,11 @@ La ventana incluye los instantes de apertura y cierre, expresados con zona horar
 ## Incremento 14 — Menciones requeridas (2026-11-24)
 
 El mínimo se evalúa sobre las cuentas distintas de un comentario. Las menciones al propio autor y al comercio aportan cero. Las demás pueden cumplir el mínimo aunque estén acompañadas por menciones excluidas. Si falta la identidad verificable del autor, la regla activa devuelve autor_no_verificable. El mínimo cero desactiva el requisito. Ejemplo con mínimo dos: Ana cumple con «@Ana @Tienda @Luis @Sol» por Luis y Sol. La agrupación entre comentarios y la política de participantes quedan para el paso 15. Pasaron Ruff, formato y las 33 pruebas locales en Python 3.14.3.
+
+## Incremento 15 — Una entrada por participante
+
+Se elige la clave de identidad para toda la campaña antes de evaluar. El ID de autor conserva la identidad ante cambios de nombre. Para fuentes que solo aportan nombres se puede elegir username normalizado; en ese modo un cambio de nombre podría dividir a una persona. Una clave ausente queda registrada como identidad_no_disponible.
+
+Se admiten raíces. Cada comentario debe cumplir por sí solo el mínimo de menciones. Entre todos los comentarios válidos del mismo participante, incluso en publicaciones distintas, concede entrada el primero por fecha UTC, publicación e ID. Las decisiones conservan la referencia del comentario y sus motivos. La repetición idéntica de una fila se absorbe; dos versiones diferentes para la misma referencia requieren resolución.
+
+Cuatro pruebas verificaron desempate y cambio de nombre, reglas por comentario, respuestas, políticas de identidad y duplicados contradictorios.
