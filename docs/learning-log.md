@@ -207,3 +207,7 @@ Se incorporaron dos comandos de diagnóstico al cliente de solo lectura. La list
 ## Incremento 10 — Cuenta activa cifrada (2026-11-24)
 
 La CLI valida el perfil antes de guardar una credencial. El archivo se reemplaza de forma atómica con permisos privados y la clave se proporciona por separado desde el entorno. La fecha de corte opcional permite rechazar una credencial vencida. Con datos sintéticos verificamos la lectura con la clave correcta, el rechazo con otra clave y la conservación del archivo al rechazar un reemplazo vencido. Pasaron Ruff y seis pruebas locales.
+
+## Incremento 11 — Contrato del comentario (2026-11-24)
+
+Comment conserva el texto original, los identificadores de comentario y publicación y el instante normalizado a UTC. parent_id enlaza una respuesta con su comentario. El identificador y el nombre del autor pueden faltar independientemente. Esto permite representar la observación antes de aplicar reglas de elegibilidad. Los adaptadores de fuentes se implementarán en sus propios incrementos. Ruff y 14 pruebas pasaron con Python 3.14.3, incluidos el cambio de día al convertir a UTC, autor ausente, fecha ambigua y autorreferencia.
