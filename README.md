@@ -137,3 +137,27 @@ El JSONL contiene los datos originales del comentario y representa los instantes
 en UTC. Se ordena por publicación e ID y absorbe repeticiones idénticas.
 Para comprobar el contenido, compará `sha256sum RUTA_DEL_JSONL` con el hash
 registrado. La aplicación reutiliza archivos idénticos y rechaza conflictos.
+
+## Extraer una publicación autorizada
+
+Con la versión y la credencial configuradas según la guía de cuenta de prueba:
+
+```bash
+uv run --locked python -m sorteos --version-api "$VERSION_API" snapshot --publicacion "$MEDIA_ID" --max-peticiones 500
+```
+
+Cada página de comentarios y cada consulta de respuestas consume presupuesto,
+incluso si vuelve vacía. El límite de 500 intentos es local y configurable.
+Un fallo transitorio admite dos reintentos con pausas de uno y dos segundos.
+Un 429 detiene el trabajo. El JSONL final se publica al concluir la lectura.
+
+En el destino del snapshot, la tabla `jobs` de `trabajos.sqlite3` conserva el
+origen, estado, registros leídos, cantidad única y SHA-256. Para revisar el
+progreso desde otra terminal con la utilidad SQLite:
+
+```bash
+sqlite3 -readonly exports/snapshots/trabajos.sqlite3 'SELECT id,status,processed,unique_count FROM jobs ORDER BY id DESC;'
+```
+
+El avance se guarda cada cien registros y al cerrar. Una ejecución nueva empieza
+desde el principio hasta que se incorpore la reanudación por cursor.

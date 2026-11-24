@@ -36,12 +36,19 @@ def main():
     source.add_argument("--publicacion", help="ID de publicación en Graph")
     source.add_argument("--archivo", type=Path)
     source.add_argument("--sinteticos", type=int, metavar="CANTIDAD")
+    snapshot.add_argument(
+        "--max-peticiones",
+        type=int,
+        help="Presupuesto de intentos HTTP (500 por defecto)",
+    )
     snapshot.add_argument("--semilla", type=int)
     snapshot.add_argument("--destino", type=Path, default=Path("exports/snapshots"))
     args = parser.parse_args()
     if args.command == "snapshot":
         if args.sinteticos is None and args.semilla is not None:
             parser.error("--semilla requiere --sinteticos")
+        if args.max_peticiones is not None and args.publicacion is None:
+            parser.error("--max-peticiones requiere --publicacion")
         seed = 16 if args.semilla is None else args.semilla
         try:
             if args.publicacion is not None:
@@ -50,7 +57,16 @@ def main():
                 token = os.getenv("INSTAGRAM_ACCESS_TOKEN") or load_token(
                     credential_path()
                 )
-                records = GraphSource(Graph(args.version_api, token), args.publicacion)
+                records = GraphSource(
+                    Graph(
+                        args.version_api,
+                        token,
+                        request_budget=500
+                        if args.max_peticiones is None
+                        else args.max_peticiones,
+                    ),
+                    args.publicacion,
+                )
                 origin = f"Graph {args.version_api}, publicación {args.publicacion}"
             elif args.archivo:
                 records = FileSource(args.archivo)

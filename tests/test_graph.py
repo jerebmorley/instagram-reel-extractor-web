@@ -54,3 +54,39 @@ def test_empty_media():
     graph = Graph("v25.0", "fake")
     with patch.object(graph, "read", return_value={"data": []}):
         assert graph.media() == {"publicaciones": [], "hay_mas": False}
+
+
+@pytest.mark.parametrize("budget,expected", [(2, 2), (9, 3)])
+def test_transient_attempts_are_bounded(budget, expected):
+    with (
+        patch("sorteos.graph.HTTPSConnection") as factory,
+        patch("sorteos.graph.time.sleep") as sleep,
+    ):
+        factory.return_value.getresponse.side_effect = TimeoutError()
+        with pytest.raises(GraphError):
+            Graph("v25.0", "fake", request_budget=budget).profile()
+        assert factory.return_value.request.call_count == expected
+        assert sleep.call_count == expected - 1
+
+
+def test_rate_limit_stops_without_retry():
+    with patch("sorteos.graph.HTTPSConnection") as factory:
+        factory.return_value.getresponse.return_value.status = 429
+        with pytest.raises(GraphError, match="429"):
+            Graph("v25.0", "fake").profile()
+        assert factory.return_value.request.call_count == 1
+
+
+def test_retry_success_charges_shared_budget():
+    with (
+        patch("sorteos.graph.HTTPSConnection") as factory,
+        patch("sorteos.graph.time.sleep"),
+    ):
+        response = io.BytesIO(b'{"id":"1","username":"demo"}')
+        response.status = 200
+        factory.return_value.getresponse.side_effect = [TimeoutError(), response]
+        graph = Graph("v25.0", "fake", request_budget=2)
+        assert graph.profile()["id"] == "1"
+        with pytest.raises(GraphError, match="agotado"):
+            graph.profile()
+        assert factory.return_value.request.call_count == 2

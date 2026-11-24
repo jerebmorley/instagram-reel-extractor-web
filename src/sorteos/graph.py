@@ -2,6 +2,7 @@
 
 import json
 import re
+import time
 from http.client import HTTPException, HTTPSConnection
 from urllib.parse import urlencode
 
@@ -10,8 +11,15 @@ class GraphError(Exception):
     """Error que puede mostrarse al operador."""
 
 
+class TransientError(GraphError):
+    """Una lectura GET puede volver a intentarse."""
+
+
 class Graph:
-    def __init__(self, version, token):
+    def __init__(self, version, token, *, request_budget=500):
+        if type(request_budget) is not int or request_budget < 1:
+            raise GraphError("El presupuesto de peticiones debe ser positivo.")
+        self.remaining = request_budget
         if not re.fullmatch(r"v[0-9]+\.[0-9]+", version):
             raise GraphError("Usá la versión del panel con formato vN.N.")
         if not re.fullmatch(r"[!-~]+", token):
@@ -20,6 +28,18 @@ class Graph:
         self._token = token
 
     def read(self, path, fields, **params):
+        for attempt in range(3):
+            if self.remaining == 0:
+                raise GraphError("Presupuesto local de peticiones agotado.")
+            self.remaining -= 1
+            try:
+                return self._read_once(path, fields, **params)
+            except TransientError:
+                if attempt == 2 or self.remaining == 0:
+                    raise
+                time.sleep(2**attempt)
+
+    def _read_once(self, path, fields, **params):
         connection = HTTPSConnection("graph.instagram.com", timeout=15)
         query = urlencode({"fields": fields, **params})
         try:
@@ -29,6 +49,12 @@ class Graph:
                 headers={"Authorization": f"Bearer {self._token}"},
             )
             response = connection.getresponse()
+            if response.status == 429:
+                raise GraphError("HTTP 429: Meta limitó el uso. Reintentá más tarde.")
+            if response.status in (500, 502, 503, 504) and not response.getheader(
+                "Retry-After"
+            ):
+                raise TransientError(f"Fallo transitorio HTTP {response.status}.")
             if response.status != 200:
                 raise GraphError(
                     f"Meta devolvió HTTP {response.status}. Revisá el token, "
@@ -38,7 +64,9 @@ class Graph:
             if not isinstance(payload, dict) or "error" in payload:
                 raise GraphError("La API devolvió una respuesta inesperada.")
             return payload
-        except (ValueError, HTTPException, OSError):
+        except (HTTPException, OSError):
+            raise TransientError("Falló la conexión con Meta.") from None
+        except ValueError:
             raise GraphError(
                 "Falló la conexión o la lectura de la respuesta."
             ) from None

@@ -251,3 +251,7 @@ El comando snapshot registra el origen, el estado y el avance cada cien registro
 ## Incremento 20 — Recorrido de Graph
 
 GraphSource transforma cada raíz y respuesta al contrato Comment. Solicita hasta 50 registros por página, reconstruye cada petición con el cursor after y conserva el padre de cada respuesta. Dos pruebas sintéticas recorrieron páginas vacías con continuación y detectaron un ciclo de cursores. El tamaño efectivo y los campos devueltos siguen pendientes de medición con la cuenta autorizada. [Paginación según Meta](https://developers.facebook.com/docs/graph-api/results/)
+
+## Incremento 21 — Presupuesto y reintentos
+
+Cada petición GET descuenta un intento del presupuesto compartido por el cliente. Los errores de conexión y los HTTP 500, 502, 503 y 504 sin Retry-After admiten hasta tres intentos totales. Un 429 o una indicación Retry-After en esos errores HTTP detiene la operación. Es una política local conservadora; el presupuesto no mide la cuota disponible en Meta. Las pruebas simulan agotamiento, recuperación, error permanente y límite de uso. Ruff, formato y 52 pruebas pasaron con Python 3.14.3. La CLI completó un trabajo de 101 registros sintéticos con hash. Sigue pendiente validar una publicación real y reanudar trabajos desde un cursor persistido.
