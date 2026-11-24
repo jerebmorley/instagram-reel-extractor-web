@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
-from sorteos.mentions import normalize_username
+from sorteos.mentions import mentions, normalize_username
 from sorteos.models import Comment
 
 
@@ -13,7 +13,18 @@ class Rules:
     ends_at: datetime
     excluded_usernames: frozenset[str] = frozenset()
 
+    required_mentions: int = 0
+    business_username: str | None = None
+
     def __post_init__(self):
+        if type(self.required_mentions) is not int or self.required_mentions < 0:
+            raise ValueError("La cantidad de menciones debe ser un entero no negativo.")
+        if self.required_mentions and self.business_username is None:
+            raise ValueError("Indicá la cuenta del comercio para evaluar menciones.")
+        if self.business_username is not None:
+            object.__setattr__(
+                self, "business_username", normalize_username(self.business_username)
+            )
         for field in ("starts_at", "ends_at"):
             value = getattr(self, field)
             if not isinstance(value, datetime) or value.utcoffset() is None:
@@ -36,9 +47,12 @@ def evaluate(comment: Comment, rules: Rules) -> tuple[str, ...]:
         author = normalize_username(comment.username or "")
     except ValueError:
         author = None
-    if rules.excluded_usernames:
-        if author is None:
-            reasons.append("autor_no_verificable")
-        elif author in rules.excluded_usernames:
-            reasons.append("autor_excluido")
+    if author is None and (rules.excluded_usernames or rules.required_mentions):
+        reasons.append("autor_no_verificable")
+    if author in rules.excluded_usernames:
+        reasons.append("autor_excluido")
+    if rules.required_mentions:
+        candidates = set(mentions(comment.text)) - {author, rules.business_username}
+        if len(candidates) < rules.required_mentions:
+            reasons.append("menciones_insuficientes")
     return tuple(reasons)

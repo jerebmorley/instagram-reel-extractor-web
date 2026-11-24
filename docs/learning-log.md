@@ -219,3 +219,7 @@ El parser local admite nombres ASCII de hasta 30 caracteres con puntos internos,
 ## Incremento 13 — Fechas y exclusiones (2026-11-24)
 
 La ventana incluye los instantes de apertura y cierre, expresados con zona horaria. La lista de exclusión contiene nombres de autores normalizados. Ante un nombre ausente o inválido, una lista activa produce autor_no_verificable. La función devuelve todos los motivos aplicables en orden estable. Siete pruebas comprobaron los extremos, instantes adyacentes, motivos simultáneos y ventanas inválidas.
+
+## Incremento 14 — Menciones requeridas (2026-11-24)
+
+El mínimo se evalúa sobre las cuentas distintas de un comentario. Las menciones al propio autor y al comercio aportan cero. Las demás pueden cumplir el mínimo aunque estén acompañadas por menciones excluidas. Si falta la identidad verificable del autor, la regla activa devuelve autor_no_verificable. El mínimo cero desactiva el requisito. Ejemplo con mínimo dos: Ana cumple con «@Ana @Tienda @Luis @Sol» por Luis y Sol. La agrupación entre comentarios y la política de participantes quedan para el paso 15. Pasaron Ruff, formato y las 33 pruebas locales en Python 3.14.3.
