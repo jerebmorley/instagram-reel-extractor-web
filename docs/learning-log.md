@@ -199,3 +199,7 @@ La guía reúne el procedimiento del titular y la matriz que completaremos con l
 ## Incremento 08 — Perfil autorizado (2026-11-24)
 
 La CLI recibe la versión explícita y toma el token del entorno. El cliente usa HTTPS al host fijo y envía la credencial en la cabecera. Solo muestra id y username para que el operador compruebe la identidad. Ruff y tres pruebas pasaron con respuestas simuladas, incluida una denegación HTTP. La lectura con la cuenta de prueba sigue pendiente.
+
+## Incremento 09 — Muestra de publicaciones y comentarios (2026-11-24)
+
+Se incorporaron dos comandos de diagnóstico al cliente de solo lectura. La lista de publicaciones permite elegir el ID y el informe conserva la relación raíz-respuestas mediante agrupación. Los campos presentes y los indicadores de continuación permiten revisar datos faltantes y cobertura parcial sin guardar textos. Ruff, formato y cinco pruebas pasaron en Python 3.14.3, incluidas una página vacía y una raíz con campos ausentes y otra página disponible. Se comprobó la ayuda de la CLI. Falta contrastar la muestra con la publicación real del titular.

@@ -5,7 +5,7 @@ locales desde la computadora del operador.
 
 ## Estado actual
 
-La CLI local permite comprobar el perfil autorizado. La guía de cuenta de prueba
+La CLI local permite comprobar el perfil autorizado y tomar muestras de publicaciones, comentarios y respuestas. La guía de cuenta de prueba
 detalla los comandos y la evidencia pendiente de obtener con Meta.
 
 ## Alcance previsto

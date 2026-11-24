@@ -34,3 +34,18 @@ export INSTAGRAM_ACCESS_TOKEN
 uv run --locked python -m sorteos --version-api "$VERSION_API" perfil
 unset INSTAGRAM_ACCESS_TOKEN
 ```
+
+## Inspeccionar una publicación
+
+Con las variables de la prueba de perfil todavía disponibles (antes de `unset`), listá hasta diez publicaciones y elegí el ID de una publicación propia con comentarios conocidos.
+
+```bash
+uv run --locked python -m sorteos --version-api "$VERSION_API" publicaciones
+read -rp 'ID de la publicación de prueba: ' MEDIA_ID
+uv run --locked python -m sorteos --version-api "$VERSION_API" comentarios "$MEDIA_ID"
+unset INSTAGRAM_ACCESS_TOKEN
+```
+
+Cada elemento de `comentarios` representa una raíz y agrupa debajo los campos presentes de sus respuestas. Una lista vacía indica que la página recibida estaba vacía. Las marcas `hay_mas` y `hay_mas_respuestas` indican que Meta ofreció otra página. Son muestras de hasta diez filas por consulta. El comando realiza hasta once peticiones por publicación. La extracción completa con cursor corresponde al incremento 20.
+
+Registrá en la matriz los recuentos y los nombres de campos observados. La muestra omite valores de comentarios y enlaces de paginación. La medición de cuotas queda pendiente. [Referencia de publicaciones de Meta](https://developers.facebook.com/docs/instagram-platform/reference/instagram-media/)

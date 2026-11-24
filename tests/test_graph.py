@@ -26,3 +26,31 @@ def test_failure_does_not_echo_response():
         with pytest.raises(GraphError, match="HTTP 403") as error:
             Graph("v25.0", "synthetic-secret").profile()
         assert "synthetic-secret" not in str(error.value)
+
+
+def test_sample_keeps_partial_pages_and_missing_fields_visible():
+    graph = Graph("v25.0", "fake")
+    with patch.object(
+        graph,
+        "read",
+        side_effect=[
+            {"data": [{"id": "2", "text": "privado"}], "paging": {"next": "sensible"}},
+            {"data": [{"id": "3", "username": "persona"}]},
+        ],
+    ) as read:
+        result = graph.comments("1")
+        assert [c.args[0] for c in read.call_args_list] == ["1/comments", "2/replies"]
+    assert result["hay_mas"]
+    assert result["comentarios"] == [
+        {
+            "campos_presentes": ["id", "text"],
+            "respuestas": [["id", "username"]],
+            "hay_mas_respuestas": False,
+        }
+    ]
+
+
+def test_empty_media():
+    graph = Graph("v25.0", "fake")
+    with patch.object(graph, "read", return_value={"data": []}):
+        assert graph.media() == {"publicaciones": [], "hay_mas": False}
