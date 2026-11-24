@@ -41,8 +41,8 @@ Sin Make, los comandos equivalentes son:
 
 ```bash
 uv sync --locked
-uv run --locked ruff check src tests
-uv run --locked ruff format --check src tests
+uv run --locked ruff check src tests scripts
+uv run --locked ruff format --check src tests scripts
 uv run --locked pytest
 ```
 
@@ -105,3 +105,11 @@ git show d49aeb7:version_web/app.py
 La retirada no desinstala paquetes del entorno virtual local ni elimina archivos
 locales ignorados o no versionados. Los entornos virtuales, credenciales y datos
 reales no deben incorporarse al repositorio.
+
+## Evaluar una campaña de ejemplo
+
+Desde la raíz, ejecutá `uv run --locked python scripts/medir_campana.py`. Genera
+10.000 comentarios ficticios con semilla 16, evalúa una entrada por participante
+en tres publicaciones y muestra el tiempo de la primera evaluación. Después
+regenera los datos y comprueba que la evaluación en orden inverso produce las
+mismas decisiones. La medición excluye la generación y el acceso a Instagram.

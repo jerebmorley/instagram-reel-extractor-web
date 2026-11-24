@@ -231,3 +231,7 @@ Se elige la clave de identidad para toda la campaña antes de evaluar. El ID de 
 Se admiten raíces. Cada comentario debe cumplir por sí solo el mínimo de menciones. Entre todos los comentarios válidos del mismo participante, incluso en publicaciones distintas, concede entrada el primero por fecha UTC, publicación e ID. Las decisiones conservan la referencia del comentario y sus motivos. La repetición idéntica de una fila se absorbe; dos versiones diferentes para la misma referencia requieren resolución.
 
 Cuatro pruebas verificaron desempate y cambio de nombre, reglas por comentario, respuestas, políticas de identidad y duplicados contradictorios.
+
+## Incremento 16 — Campaña reproducible
+
+El generador usa un reloj de referencia fijo y una semilla local. La muestra incluye ráfagas, participantes repetidos, autoarrobas, menciones duplicadas, URLs, exclusiones, fechas fuera de ventana, identidad ausente y respuestas. Con Python 3.14.3 y semilla 16, la primera evaluación de 10.000 comentarios produjo 1.988 entradas en 0,093 segundos en el equipo local. Una segunda generación produjo los mismos comentarios y la evaluación inversa reprodujo todas las decisiones. El tiempo mide solo la consolidación en memoria y varía según el equipo. Ruff, formato y las 38 pruebas pasaron. El README incluye el comando para repetir la medición.
