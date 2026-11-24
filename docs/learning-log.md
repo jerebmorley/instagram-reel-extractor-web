@@ -203,3 +203,7 @@ La CLI recibe la versión explícita y toma el token del entorno. El cliente usa
 ## Incremento 09 — Muestra de publicaciones y comentarios (2026-11-24)
 
 Se incorporaron dos comandos de diagnóstico al cliente de solo lectura. La lista de publicaciones permite elegir el ID y el informe conserva la relación raíz-respuestas mediante agrupación. Los campos presentes y los indicadores de continuación permiten revisar datos faltantes y cobertura parcial sin guardar textos. Ruff, formato y cinco pruebas pasaron en Python 3.14.3, incluidas una página vacía y una raíz con campos ausentes y otra página disponible. Se comprobó la ayuda de la CLI. Falta contrastar la muestra con la publicación real del titular.
+
+## Incremento 10 — Cuenta activa cifrada (2026-11-24)
+
+La CLI valida el perfil antes de guardar una credencial. El archivo se reemplaza de forma atómica con permisos privados y la clave se proporciona por separado desde el entorno. La fecha de corte opcional permite rechazar una credencial vencida. Con datos sintéticos verificamos la lectura con la clave correcta, el rechazo con otra clave y la conservación del archivo al rechazar un reemplazo vencido. Pasaron Ruff y seis pruebas locales.

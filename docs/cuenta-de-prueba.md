@@ -49,3 +49,19 @@ unset INSTAGRAM_ACCESS_TOKEN
 Cada elemento de `comentarios` representa una raíz y agrupa debajo los campos presentes de sus respuestas. Una lista vacía indica que la página recibida estaba vacía. Las marcas `hay_mas` y `hay_mas_respuestas` indican que Meta ofreció otra página. Son muestras de hasta diez filas por consulta. El comando realiza hasta once peticiones por publicación. La extracción completa con cursor corresponde al incremento 20.
 
 Registrá en la matriz los recuentos y los nombres de campos observados. La muestra omite valores de comentarios y enlaces de paginación. La medición de cuotas queda pendiente. [Referencia de publicaciones de Meta](https://developers.facebook.com/docs/instagram-platform/reference/instagram-media/)
+
+## Guardar la cuenta activa
+
+Conservá la clave Fernet en tu gestor de secretos. Para generarla en una terminal privada usá `uv run --locked python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'`. Cargala desde el gestor en cada sesión mediante entrada oculta.
+
+```bash
+read -rsp 'Clave Fernet: ' SORTEOS_FERNET_KEY && echo
+export SORTEOS_FERNET_KEY
+# Con VERSION_API e INSTAGRAM_ACCESS_TOKEN del procedimiento anterior:
+uv run --locked python -m sorteos --version-api "$VERSION_API" guardar-token
+unset INSTAGRAM_ACCESS_TOKEN
+uv run --locked python -m sorteos --version-api "$VERSION_API" perfil
+unset SORTEOS_FERNET_KEY
+```
+
+El guardado consulta el perfil y reemplaza la cuenta activa en `~/.local/share/sorteos-ig/cuenta.fernet` tras una validación exitosa. Podés indicar `--vence AAAA-MM-DD` con el primer día en que debe bloquearse el uso local. Si el panel no informa la fecha, omitila. Meta puede revocar el acceso antes. Un token presente en el entorno tiene prioridad sobre el archivo cifrado.
