@@ -43,6 +43,12 @@ def main():
     )
     snapshot.add_argument("--semilla", type=int)
     snapshot.add_argument("--destino", type=Path, default=Path("exports/snapshots"))
+    snapshot.add_argument(
+        "--reanudar",
+        type=int,
+        metavar="ID",
+        help="Continuar un trabajo con la misma fuente y destino",
+    )
     args = parser.parse_args()
     if args.command == "snapshot":
         if args.sinteticos is None and args.semilla is not None:
@@ -74,7 +80,9 @@ def main():
             else:
                 records = FixtureSource(args.sinteticos, seed)
                 origin = f"sintéticos: cantidad={args.sinteticos}, semilla={seed}"
-            job, path, count = run_snapshot(records, args.destino, origin)
+            job, path, count = run_snapshot(
+                records, args.destino, origin, resume=args.reanudar
+            )
         except (
             GraphError,
             CredentialError,

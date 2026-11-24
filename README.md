@@ -158,5 +158,18 @@ progreso desde otra terminal con la utilidad SQLite:
 sqlite3 -readonly exports/snapshots/trabajos.sqlite3 'SELECT id,status,processed,unique_count FROM jobs ORDER BY id DESC;'
 ```
 
-El avance se guarda cada cien registros y al cerrar. Una ejecución nueva empieza
-desde el principio hasta que se incorpore la reanudación por cursor.
+Los trabajos nuevos guardan cada página de Graph o lote de cien filas locales
+junto a su punto de continuación. Para retomar, repetí el comando con el mismo
+origen y destino y agregá `--reanudar ID` (el ID figura en la consulta anterior).
+
+```bash
+uv run --locked python -m sorteos snapshot --sinteticos 10000 --semilla 16 --reanudar 1
+```
+
+En archivos y fixtures se vuelve a leer y verificar el prefijo ya confirmado.
+En Graph se retoma la página de raíces o respuestas pendiente; la cuenta debe
+seguir autorizada y el cursor debe continuar vigente. Un nuevo proceso dispone
+de su propio presupuesto de peticiones. Cambios en Instagram durante la pausa
+pueden alterar el conjunto observado. Los trabajos anteriores a este incremento
+carecen de datos parciales para reanudar. En Linux el bloqueo por trabajo se
+libera cuando termina el proceso, incluso tras un cierre abrupto.

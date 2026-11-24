@@ -259,3 +259,7 @@ Cada petición GET descuenta un intento del presupuesto compartido por el client
 ## Limpieza del entorno del prototipo
 
 Los 3.118 archivos y enlaces del entorno anterior coincidían con la copia histórica de Git. Se eliminó esa instalación local de Python 3.12. El proyecto usa únicamente `.venv/`, sincronizado con `uv.lock`. El intérprete confirmó su ruta y pasaron Ruff, formato y 52 pruebas con Python 3.14.3.
+
+## Incremento 22 — Reanudar el mismo trabajo
+
+SQLite confirma filas, contador y cursor en una sola transacción. Se conserva la cola de respuestas y los cursores vistos por colección. La publicación del snapshot precede al cierre del trabajo y ambos admiten repetir el intento tras un corte. Un bloqueo local impide que dos procesos escriban el mismo trabajo. Los parciales se eliminan al completar. La prueba con un prefijo local alterado rechazó la reanudación y permitió recuperar el trabajo con la fuente original. Pasaron 53 pruebas locales, Ruff y formato.
