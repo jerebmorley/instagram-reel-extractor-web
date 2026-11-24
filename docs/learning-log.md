@@ -263,3 +263,7 @@ Los 3.118 archivos y enlaces del entorno anterior coincidían con la copia hist�
 ## Incremento 22 — Reanudar el mismo trabajo
 
 SQLite confirma filas, contador y cursor en una sola transacción. Se conserva la cola de respuestas y los cursores vistos por colección. La publicación del snapshot precede al cierre del trabajo y ambos admiten repetir el intento tras un corte. Un bloqueo local impide que dos procesos escriban el mismo trabajo. Los parciales se eliminan al completar. La prueba con un prefijo local alterado rechazó la reanudación y permitió recuperar el trabajo con la fuente original. Pasaron 53 pruebas locales, Ruff y formato.
+
+## Incremento 23 — Recuperación comprobada de punta a punta
+
+Tras un cierre abrupto del proceso con 5.000 filas confirmadas en SQLite, otra ejecución de la CLI retomó el trabajo 1. El resultado contiene los 10.000 comentarios y coincide byte por byte y por SHA-256 con un trabajo continuo en otro directorio. Una segunda prueba interrumpió Graph entre páginas de respuestas simuladas y comprobó que solo se pidió la página pendiente, conservando los vínculos con la raíz. Pasaron 55 pruebas locales en Python 3.14.3, Ruff y formato. Para repetir ambas pruebas: `uv run --locked pytest tests/test_recovery.py`.
