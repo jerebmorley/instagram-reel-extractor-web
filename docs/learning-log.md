@@ -235,3 +235,7 @@ Cuatro pruebas verificaron desempate y cambio de nombre, reglas por comentario, 
 ## Incremento 16 — Campaña reproducible
 
 El generador usa un reloj de referencia fijo y una semilla local. La muestra incluye ráfagas, participantes repetidos, autoarrobas, menciones duplicadas, URLs, exclusiones, fechas fuera de ventana, identidad ausente y respuestas. Con Python 3.14.3 y semilla 16, la primera evaluación de 10.000 comentarios produjo 1.988 entradas en 0,093 segundos en el equipo local. Una segunda generación produjo los mismos comentarios y la evaluación inversa reprodujo todas las decisiones. El tiempo mide solo la consolidación en memoria y varía según el equipo. Ruff, formato y las 38 pruebas pasaron. El README incluye el comando para repetir la medición.
+
+## Incremento 17 — Fuentes locales
+
+FileSource y FixtureSource se recorren como secuencias de Comment. Los identificadores se mantienen como cadenas para conservar ceros iniciales. En CSV las celdas opcionales vacías representan ausencia. La validación identifica el registro que incumple el contrato. Cinco pruebas comprobaron equivalencia entre formatos, zonas horarias, texto multilínea, reproducibilidad y rechazo de entradas incompletas.
