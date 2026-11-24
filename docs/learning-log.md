@@ -215,3 +215,7 @@ Comment conserva el texto original, los identificadores de comentario y publicac
 ## Incremento 12 — Menciones (2026-11-24)
 
 El parser local admite nombres ASCII de hasta 30 caracteres con puntos internos, letras, números y guion bajo. Quita la puntuación final, compara en minúsculas y conserva la primera aparición de cada cuenta. Son convenciones de campaña para interpretar texto, sin verificar si la cuenta existe. Pasaron cinco casos de tabla con duplicados, correos, URLs, puntuación, longitud y caracteres Unicode parecidos.
+
+## Incremento 13 — Fechas y exclusiones (2026-11-24)
+
+La ventana incluye los instantes de apertura y cierre, expresados con zona horaria. La lista de exclusión contiene nombres de autores normalizados. Ante un nombre ausente o inválido, una lista activa produce autor_no_verificable. La función devuelve todos los motivos aplicables en orden estable. Siete pruebas comprobaron los extremos, instantes adyacentes, motivos simultáneos y ventanas inválidas.
