@@ -5,14 +5,8 @@ locales desde la computadora del operador.
 
 ## Estado actual
 
-El paquete instalable `sorteos` está en `src/sorteos`, con pytest, Ruff y
-comprobaciones locales. El incremento 05 agrega su automatización en GitHub
-Actions. **Todavía no hay CLI, interfaz ni funciones de extracción o sorteo.**
-
-El prototipo solicitaba contraseñas de Instagram. La nueva arquitectura prevé
-fuentes autorizadas, acceso mediante token y un modo archivo con datos sintéticos.
-La disponibilidad y los requisitos del acceso real se verificarán antes de
-implementar esa integración.
+La CLI local permite comprobar el perfil autorizado. La guía de cuenta de prueba
+detalla los comandos y la evidencia pendiente de obtener con Meta.
 
 ## Alcance previsto
 

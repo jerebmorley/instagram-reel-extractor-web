@@ -22,3 +22,15 @@ Al completar cada fila anotá fecha, versión de API y resultado observado. Para
 | 09 | Observar consumo | Nombres y unidades de cabeceras de uso disponibles. Registrar cuota horaria solo si existe un valor explícito | Pendiente |
 
 Para cerrar el 08 se necesita una lectura autenticada del perfil. Para el 09 se compara la publicación preparada con los comentarios y respuestas devueltos. Si la identidad del autor falta, se documenta antes de decidir cómo contará esa participación.
+
+## Ejecutar la prueba de perfil
+
+En Bash, desde la raíz, ingresá la versión de tu panel y pegá el token en la entrada oculta. El titular puede comparar el usuario devuelto con su cuenta. Conservá en la matriz solo la fecha, versión y resultado de esa comparación.
+
+```bash
+read -rp 'Versión API (vN.N): ' VERSION_API
+read -rsp 'Token: ' INSTAGRAM_ACCESS_TOKEN && echo
+export INSTAGRAM_ACCESS_TOKEN
+uv run --locked python -m sorteos --version-api "$VERSION_API" perfil
+unset INSTAGRAM_ACCESS_TOKEN
+```

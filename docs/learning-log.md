@@ -195,3 +195,7 @@ Los ADR registran por qué la procedencia de cada conjunto de comentarios debe c
 ## Incremento 07 — Preparación de la cuenta de prueba (2026-11-24)
 
 La guía reúne el procedimiento del titular y la matriz que completaremos con lecturas reales. Contrastamos la modalidad Instagram Login, el host y los permisos con las referencias oficiales de Meta enlazadas en la guía. Revisamos los enlaces internos del README y el diff de documentación. La configuración en el panel, el vencimiento del token y todas las mediciones siguen pendientes de la prueba con una cuenta autorizada.
+
+## Incremento 08 — Perfil autorizado (2026-11-24)
+
+La CLI recibe la versión explícita y toma el token del entorno. El cliente usa HTTPS al host fijo y envía la credencial en la cabecera. Solo muestra id y username para que el operador compruebe la identidad. Ruff y tres pruebas pasaron con respuestas simuladas, incluida una denegación HTTP. La lectura con la cuenta de prueba sigue pendiente.
