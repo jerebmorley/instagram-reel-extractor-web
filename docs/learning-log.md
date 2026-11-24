@@ -187,3 +187,7 @@ Fecha:
 - Límites:
 - Próximo paso:
 ```
+
+## Incremento 06 — Decisiones de arquitectura (2026-11-24)
+
+Los ADR registran por qué la procedencia de cada conjunto de comentarios debe conservarse y por qué la v1 se operará localmente. Se contrastaron ambas decisiones con las secciones 1 a 3 del roadmap y el alcance del paso 06. Son criterios para revisar futuras implementaciones.

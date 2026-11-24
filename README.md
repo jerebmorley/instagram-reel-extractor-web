@@ -89,6 +89,9 @@ Referencia: [integración oficial de uv con GitHub Actions](https://docs.astral.
 
 ## Documentación
 
+- [ADR 001 · Fuentes autorizadas](docs/adr/001-fuentes-autorizadas.md)
+- [ADR 002 · Operación local asistida](docs/adr/002-operacion-local.md)
+
 - [Roadmap original](docs/ROADMAP.md): alcance y etapas de la v1.
 - [Plan de implementación](docs/implementation-plan.md): commits y criterios de cierre.
 - [Registro de aprendizaje](docs/learning-log.md): decisiones y evidencia.
