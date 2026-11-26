@@ -8,6 +8,7 @@ import sqlite3
 import subprocess
 import sys
 from contextlib import closing
+from datetime import datetime, timezone
 from pathlib import Path
 
 from sorteos.campaign import canonical, read_snapshot
@@ -76,12 +77,26 @@ def extract(directory):
         if client.profile()["id"] != draft["cuenta"]["id"]:
             raise ValueError("La credencial corresponde a otra cuenta.")
     previous = {row["origin"]: row for row in job_rows(directory)}
+    ref_path = directory / "conteos.json"
+    refs = json.loads(ref_path.read_bytes()) if ref_path.exists() else {}
     paths = []
     for media in draft["publicaciones"]:
         job = previous.get(media)
         if job and job["status"] == "completo":
             paths.append(directory / (job["sha256"] + ".jsonl"))
             continue
+        if media not in refs:
+            expected = (
+                client.read(media, "comments_count").get("comments_count")
+                if client
+                else sum(r.media_id == media for r in synthetic_comments(100, 16))
+            )
+            refs[media] = dict(
+                cantidad=expected, fecha=datetime.now(timezone.utc).isoformat()
+            )
+            temp_ref = ref_path.with_suffix(".tmp")
+            temp_ref.write_bytes(canonical(refs))
+            temp_ref.replace(ref_path)
         records = (
             GraphSource(client, media)
             if client

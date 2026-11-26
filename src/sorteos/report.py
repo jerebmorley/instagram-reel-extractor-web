@@ -23,10 +23,15 @@ def render(data):
         )
 
     payload = base64.b64encode(canonical(data)).decode("ascii")
+    follow = (
+        "<p>Seguimiento obligatorio. Las vacantes se cubren por orden de suplencia.</p>"
+        if data.get("requiere_seguimiento")
+        else ""
+    )
     return f"""<!doctype html>
 <html lang="es"><meta charset="utf-8"><title>Acta de sorteo</title>
 <style>body{{font:1rem system-ui;max-width:48rem;margin:2rem auto}}code{{overflow-wrap:anywhere}}li{{break-inside:avoid}}</style>
-<h1>Acta de sorteo</h1>
+<h1>Acta de sorteo</h1>{follow}
 <p>Elegibles: {len(data["participantes"])} · Identidad: {escape(data["identidad"])}</p>
 <h2>Ganadores</h2>{listing("ganadores")}
 <h2>Suplentes en orden</h2>{listing("suplentes")}

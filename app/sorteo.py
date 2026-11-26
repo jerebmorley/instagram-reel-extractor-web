@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import streamlit as st
+from cierre import campaign_report, finalist_panel
 
 from sorteos.campaign import (
     commit_seed,
@@ -39,6 +40,9 @@ def show_act(directory):
         "text/html",
         key=f"acta-{directory.name}",
     )
+
+    finalist_panel(directory, data, digest)
+    campaign_report(directory)
 
 
 def draw_panel(draft):
@@ -100,15 +104,19 @@ def draw_panel(draft):
     st.write(f"Padrón congelado: {count} participantes elegibles.")
     if not count:
         st.info("La campaña cerró sin participantes elegibles.")
+        campaign_report(directory)
         return
     with st.form("cupos"):
         winners = st.number_input(
             "Cantidad de ganadores", min_value=1, max_value=count, value=1
         )
         reserves = st.number_input("Cantidad de suplentes", min_value=0, value=0)
+        require_follow = st.checkbox(
+            "Las bases exigen seguir la cuenta. Cubrir vacantes en orden de suplencia."
+        )
         submitted = st.form_submit_button("Realizar sorteo")
     if submitted:
-        draw(db, winners, reserves)
+        draw(db, winners, reserves, require_follow=require_follow)
         st.rerun()
 
 

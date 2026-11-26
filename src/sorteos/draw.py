@@ -66,7 +66,7 @@ def validate(data):
         raise ValueError("Los resultados difieren del ranking reproducido.")
 
 
-def draw(database, winners, alternates):
+def draw(database, winners, alternates, *, require_follow=False):
     info = reveal(database)
     with closing(sqlite3.connect(database)) as db:
         row = db.execute("SELECT data FROM records WHERE name='padron'").fetchone()
@@ -85,6 +85,8 @@ def draw(database, winners, alternates):
         cupos_suplentes=alternates,
         resultado=select(roster["participants"], info["semilla"], winners, alternates),
     )
+    if require_follow:
+        data["requiere_seguimiento"] = True
     validate(data)
     # Un reintento puede volver a exportar el mismo sorteo tras un error de disco.
     with closing(sqlite3.connect(database)) as db:

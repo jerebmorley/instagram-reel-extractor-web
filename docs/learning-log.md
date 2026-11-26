@@ -293,3 +293,18 @@ La prueba AppTest inició el trabajador real en una carpeta temporal, comprobó 
 ## Incremento 32 — Finalizar y recuperar el sorteo (2026-11-26)
 
 Streamlit permite preparar el compromiso, registrar su publicación, congelar las revisiones vigentes, asignar cupos y descargar el acta del motor existente. El historial recupera campañas finalizadas desde disco. Para datos ficticios se usa un compromiso de demostración y una referencia que identifica la simulación. La prueba automática recorrió la demo con extracción en subproceso, congeló el padrón, obtuvo un ganador y un suplente y verificó la misma huella en una sesión nueva. Pasaron Ruff, formato y 64 pruebas locales. El paso 33 cuenta con un guion y queda pendiente de dos observaciones humanas.
+
+## Incrementos 34–36 — Verificación de finalistas y reporte (2026-11-26)
+
+Agrupamos el cierre manual y el reporte porque ambos parten del padrón congelado.
+El acta registra si las bases exigen seguimiento. El anexo vincula el control
+manual con la huella del acta y conserva corte, motivos, ganadores confirmados y
+vacantes. Una prueba de interfaz rechazó al ganador ficticio, confirmó al primer
+suplente y verificó que el acta original conservaba su huella.
+
+El CSV deriva las entradas del padrón y la actividad del snapshot. Los fixtures
+comprobaron menciones repetidas, varios motivos para un descarte y los cuatro
+estados de cobertura. La referencia por publicación conserva la fecha de lectura
+para poder interpretar una diferencia. Pasaron Ruff, formato y 66 pruebas locales
+con Python 3.14.3. El acceso con una cuenta real y las dos sesiones observadas
+del incremento 33 siguen pendientes.

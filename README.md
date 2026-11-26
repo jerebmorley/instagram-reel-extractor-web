@@ -263,3 +263,20 @@ En **Campaña de prueba**, aplicá la configuración inicial y pulsá **Preparar
 Para una **Cuenta autorizada**, generá el compromiso antes del cierre, publicá la huella y registrá la referencia y el instante real de publicación. Tras el cierre, extraé la publicación completa y revisá los participantes. **Congelar padrón** fija las últimas decisiones manuales. Elegí los cupos y pulsá **Realizar sorteo**. El resultado y el acta quedan en la carpeta de la campaña. **Ver historial de sorteos** permite recuperar el HTML y su huella en otra sesión desde el mismo proyecto.
 
 La preparación del paso 33 está en el [guion de prueba de uso](docs/prueba-de-uso.md).
+
+### Verificación de finalistas y reporte
+
+Si las bases exigen seguir la cuenta, marcá esa condición antes de realizar el
+sorteo. En el resultado, registrá la fecha de corte con zona horaria, el estado
+y el motivo de cada control manual. Al confirmar se ocupan los cupos según
+el orden original. Si se agotan los suplentes, el anexo indica las vacantes.
+Guardá el anexo JSON junto con el acta HTML. La huella del HTML permite
+identificar el sorteo al que corresponde el anexo.
+
+El reporte CSV muestra entradas antes y después de la revisión, motivos de
+descarte, menciones y comentarios por día UTC. Un comentario puede tener varios
+motivos. Cada cuenta mencionada cuenta una vez por comentario. La diferencia
+de cobertura se calcula como extraídos menos referencia, incluyendo respuestas.
+Un valor negativo señala un faltante respecto del conteo observado. Sin referencia
+guardada, la cobertura figura como desconocida. La igualdad de cantidades por sí
+sola no prueba que se hayan recuperado exactamente los mismos comentarios.
