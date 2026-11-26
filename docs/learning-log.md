@@ -312,3 +312,7 @@ del incremento 33 siguen pendientes.
 ## Incremento 37 — Preparación del piloto
 
 La guía vincula autorización, reglas, acceso, retención y evidencia de cierre. Revisamos el modelo contra el flujo local y el texto actualizado de la Ley 25.326. El enlace de Meta remitió a inicio de sesión. La jurisdicción, las bases definitivas y los permisos efectivos requieren confirmación con el comercio. La ficha del 39 queda preparada para registrar hechos después del piloto.
+
+## Incremento 38 — Limpieza por retención
+
+El plazo se cuenta desde el cierre en UTC. La vista previa distingue campañas vigentes, vencidas y carpetas sin configuración verificable. Para borrar se indica un ID concreto y se vuelve a verificar el vencimiento. Un traslado dentro del mismo directorio permite reanudar una eliminación interrumpida. Probamos con carpetas temporales que una campaña vigente, una configuración alterada y una extracción activa impiden borrar, y que borrar una vencida conserva las demás y el destino externo de un enlace.

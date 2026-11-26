@@ -15,6 +15,7 @@ from sorteos.graph import Graph, GraphError
 from sorteos.graph_source import GraphSource
 from sorteos.jobs import run_snapshot
 from sorteos.report import export, verify
+from sorteos.retention import cleanup
 from sorteos.sources import FileSource, FixtureSource
 
 
@@ -81,7 +82,23 @@ def main():
     check = commands.add_parser("verify", help="Reproducir un acta local")
     check.add_argument("acta", type=Path)
     check.add_argument("--sha256", help="Huella conservada por separado")
+    clean = commands.add_parser(
+        "limpiar", help="Revisar la retención de campañas de la interfaz"
+    )
+    clean.add_argument(
+        "--dias", type=int, required=True, help="Plazo acordado desde el cierre"
+    )
+    clean.add_argument(
+        "--eliminar", metavar="ID", help="Eliminar la campaña vencida indicada"
+    )
     args = parser.parse_args()
+    if args.command == "limpiar":
+        try:
+            result = cleanup(args.dias, args.eliminar)
+        except (ValueError, KeyError, TypeError, OverflowError, OSError) as error:
+            parser.exit(1, f"Retención: {error}\n")
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return
     if args.command in ("sortear", "verify"):
         try:
             if args.command == "sortear":

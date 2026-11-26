@@ -280,3 +280,27 @@ de cobertura se calcula como extraídos menos referencia, incluyendo respuestas.
 Un valor negativo señala un faltante respecto del conteo observado. Sin referencia
 guardada, la cobertura figura como desconocida. La igualdad de cantidades por sí
 sola no prueba que se hayan recuperado exactamente los mismos comentarios.
+
+## Limpiar campañas por retención
+
+Cerrá la interfaz y ejecutá el comando desde la raíz del proyecto. Indicá el plazo
+acordado con el comercio, en días completos desde el cierre configurado. Por
+ejemplo, para inspeccionar un plazo de 90 días:
+
+```bash
+uv run --locked python -m sorteos limpiar --dias 90
+```
+
+La vista previa lista los identificadores y vencimientos. Para borrar una campaña
+vencida, copiá su identificador completo en lugar de ID y conservá el mismo plazo:
+
+```bash
+uv run --locked python -m sorteos limpiar --dias 90 --eliminar ID
+```
+
+El borrado elimina la carpeta de esa campaña de Streamlit, incluidos padrón,
+comentarios, trabajos y acta. Si una eliminación se interrumpe, repetí el comando
+con el mismo ID. Una extracción activa bloquea el borrado. Una campaña antigua
+sin configuración verificable requiere revisión manual. Inventariá por separado
+las descargas, respaldos, archivos generados directamente por la CLI y la
+credencial de la cuenta. Su ubicación y su plazo pueden ser distintos.
