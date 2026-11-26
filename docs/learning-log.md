@@ -267,3 +267,7 @@ SQLite confirma filas, contador y cursor en una sola transacción. Se conserva l
 ## Incremento 23 — Recuperación comprobada de punta a punta
 
 Tras un cierre abrupto del proceso con 5.000 filas confirmadas en SQLite, otra ejecución de la CLI retomó el trabajo 1. El resultado contiene los 10.000 comentarios y coincide byte por byte y por SHA-256 con un trabajo continuo en otro directorio. Una segunda prueba interrumpió Graph entre páginas de respuestas simuladas y comprobó que solo se pidió la página pendiente, conservando los vínculos con la raíz. Pasaron 55 pruebas locales en Python 3.14.3, Ruff y formato. Para repetir ambas pruebas: `uv run --locked pytest tests/test_recovery.py`.
+
+## Incremento 24 — Congelar el padrón (2026-11-26)
+
+Una base SQLite por campaña conserva en una transacción las reglas normalizadas, identidad, hash del snapshot, decisiones automáticas, excepciones motivadas por participante y lista final ordenada. La revisión puede incluir o excluir una identidad observada. La prueba comprobó una exclusión manual, la conservación del motivo y de la decisión original, el rechazo de reemplazo y la detección de un snapshot alterado.

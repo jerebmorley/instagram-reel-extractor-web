@@ -8,6 +8,7 @@ import sqlite3
 from datetime import date
 from pathlib import Path
 
+from sorteos.campaign import freeze, load_rules
 from sorteos.credentials import CredentialError, credential_path, load_token, save_token
 from sorteos.graph import Graph, GraphError
 from sorteos.graph_source import GraphSource
@@ -49,7 +50,41 @@ def main():
         metavar="ID",
         help="Continuar un trabajo con la misma fuente y destino",
     )
+    padron = commands.add_parser("congelar", help="Congelar el padrón de una campaña")
+    padron.add_argument("campana", type=Path)
+    padron.add_argument("snapshot", type=Path)
+    padron.add_argument("reglas", type=Path)
+    padron.add_argument("--identidad", choices=("id", "username"), default="id")
+    padron.add_argument("--revisiones", type=Path)
     args = parser.parse_args()
+    if args.command == "congelar":
+        try:
+            reviews = (
+                json.loads(args.revisiones.read_text(encoding="utf-8"))
+                if args.revisiones
+                else []
+            )
+            print(
+                json.dumps(
+                    freeze(
+                        args.campana,
+                        args.snapshot,
+                        load_rules(args.reglas),
+                        args.identidad,
+                        reviews,
+                    )
+                )
+            )
+        except (
+            ValueError,
+            OSError,
+            sqlite3.Error,
+            TypeError,
+            KeyError,
+            AttributeError,
+        ) as error:
+            parser.exit(1, f"No se pudo congelar el padrón: {error}\n")
+        return
     if args.command == "snapshot":
         if args.sinteticos is None and args.semilla is not None:
             parser.error("--semilla requiere --sinteticos")
