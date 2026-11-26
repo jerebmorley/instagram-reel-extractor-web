@@ -8,7 +8,7 @@ import sqlite3
 from datetime import date
 from pathlib import Path
 
-from sorteos.campaign import freeze, load_rules
+from sorteos.campaign import commit_seed, freeze, load_rules, register_evidence, reveal
 from sorteos.credentials import CredentialError, credential_path, load_token, save_token
 from sorteos.graph import Graph, GraphError
 from sorteos.graph_source import GraphSource
@@ -56,7 +56,34 @@ def main():
     padron.add_argument("reglas", type=Path)
     padron.add_argument("--identidad", choices=("id", "username"), default="id")
     padron.add_argument("--revisiones", type=Path)
+    commit = commands.add_parser(
+        "comprometer", help="Generar el compromiso público de semilla"
+    )
+    commit.add_argument("campana", type=Path)
+    commit.add_argument("--cierre", required=True)
+    evidence = commands.add_parser(
+        "registrar-publicacion", help="Registrar evidencia declarada"
+    )
+    evidence.add_argument("campana", type=Path)
+    evidence.add_argument("--referencia", required=True)
+    evidence.add_argument("--publicado", required=True)
+    disclose = commands.add_parser("revelar", help="Revelar la semilla tras el cierre")
+    disclose.add_argument("campana", type=Path)
     args = parser.parse_args()
+    if args.command in ("comprometer", "registrar-publicacion", "revelar"):
+        try:
+            if args.command == "comprometer":
+                result = commit_seed(args.campana, args.cierre)
+            elif args.command == "registrar-publicacion":
+                result = register_evidence(
+                    args.campana, args.referencia, args.publicado
+                )
+            else:
+                result = reveal(args.campana)
+        except (ValueError, OSError, sqlite3.Error) as error:
+            parser.exit(1, f"{error}\n")
+        print(json.dumps(result))
+        return
     if args.command == "congelar":
         try:
             reviews = (

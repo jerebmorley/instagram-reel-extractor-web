@@ -173,3 +173,43 @@ de su propio presupuesto de peticiones. Cambios en Instagram durante la pausa
 pueden alterar el conjunto observado. Los trabajos anteriores a este incremento
 carecen de datos parciales para reanudar. En Linux el bloqueo por trabajo se
 libera cuando termina el proceso, incluso tras un cierre abrupto.
+
+## Preparar el sorteo
+
+Usá una base SQLite privada por campaña, bajo `exports/`. Antes del cierre,
+generá el compromiso y publicá el SHA-256 junto con la identificación de la
+campaña y su cierre. La semilla permanece en la base local. Sustituí las
+variables por la fecha y referencia reales. Las fechas requieren zona horaria.
+
+```bash
+uv run --locked python -m sorteos comprometer exports/campana.db --cierre "$CIERRE"
+uv run --locked python -m sorteos registrar-publicacion exports/campana.db --referencia "$REFERENCIA" --publicado "$PUBLICADO"
+```
+
+La referencia y la fecha son declaraciones del operador. Conservá la publicación
+original para que un tercero pueda comprobar el contenido y la fecha.
+
+Al cerrar, usá un snapshot de la campaña y un archivo JSON de reglas como este.
+Ajustá el intervalo a tus bases. El cierre debe coincidir con el del compromiso.
+
+```json
+{"starts_at":"2026-11-01T00:00:00-03:00","ends_at":"2026-11-30T18:00:00-03:00","required_mentions":2,"business_username":"tienda","excluded_usernames":[]}
+```
+
+```bash
+uv run --locked python -m sorteos congelar exports/campana.db "$SNAPSHOT" reglas.json
+uv run --locked python -m sorteos revelar exports/campana.db
+```
+
+El padrón usa ID de autor por defecto. Para una fuente identificada por nombres
+seleccioná `--identidad username`. Podés agregar `--revisiones archivo.json`
+con una lista de decisiones por identidad observada, por ejemplo
+`[{"participante":"demo_1","decision":"excluir","motivo":"Renuncia registrada"}]`.
+Una inclusión manual usa `incluir` y requiere motivo aunque el participante
+haya quedado descartado automáticamente. El padrón guarda ambas decisiones.
+Conservá el SHA-256 que imprime la CLI para identificar esa versión.
+
+Tras el cierre y el registro de la publicación, `revelar` muestra la semilla
+hexadecimal. Su compromiso es SHA-256 de los 32 bytes obtenidos al decodificar
+ese hexadecimal. Compartí la revelación cuando corresponda y mantené la base
+SQLite local, ya que contiene el padrón y la semilla en claro.

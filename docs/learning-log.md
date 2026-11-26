@@ -271,3 +271,7 @@ Tras un cierre abrupto del proceso con 5.000 filas confirmadas en SQLite, otra e
 ## Incremento 24 — Congelar el padrón (2026-11-26)
 
 Una base SQLite por campaña conserva en una transacción las reglas normalizadas, identidad, hash del snapshot, decisiones automáticas, excepciones motivadas por participante y lista final ordenada. La revisión puede incluir o excluir una identidad observada. La prueba comprobó una exclusión manual, la conservación del motivo y de la decisión original, el rechazo de reemplazo y la detección de un snapshot alterado.
+
+## Incremento 25 — Compromiso y revelación (2026-11-26)
+
+La CLI genera 32 bytes aleatorios por campaña y presenta el hash para publicación previa. La evidencia conserva la referencia pública y el instante declarado por el operador. Se verifica la ventana temporal y la coincidencia de cierres entre padrón y compromiso. La revelación requiere evidencia y cierre alcanzado. La prueba usó un reloj controlado y reprodujo el hash desde la semilla revelada. Pasaron Ruff, formato y 57 pruebas locales. La autenticidad de la referencia pública queda a cargo de la verificación externa.

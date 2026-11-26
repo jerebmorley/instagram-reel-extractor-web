@@ -30,3 +30,37 @@ def test_freeze_records_override_and_refuses_replacement(tmp_path):
     path.write_bytes(b"")
     with pytest.raises(ValueError, match="SHA-256"):
         freeze(db, path, fixture_rules(), "id", [])
+
+
+def test_commit_publish_reveal(tmp_path, monkeypatch):
+    import hashlib
+    from datetime import datetime, timedelta, timezone
+
+    from sorteos import campaign
+
+    class Clock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return now
+
+    now = datetime(2026, 1, 1, tzinfo=timezone.utc)
+    monkeypatch.setattr(campaign, "datetime", Clock)
+    db = tmp_path / "campaign.db"
+    end = now + timedelta(days=1)
+    info = campaign.commit_seed(db, end.isoformat())
+    assert "semilla" not in info
+    assert db.stat().st_mode & 0o077 == 0
+    with pytest.raises(ValueError, match="ya existe"):
+        campaign.commit_seed(db, end.isoformat())
+    with pytest.raises(ValueError, match="cierre"):
+        campaign.reveal(db)
+    with pytest.raises(ValueError):
+        campaign.register_evidence(db, "demo", end.isoformat())
+    now += timedelta(hours=1)
+    campaign.register_evidence(db, "referencia ficticia", now.isoformat())
+    now = end
+    result = campaign.reveal(db)
+    assert (
+        hashlib.sha256(bytes.fromhex(result["semilla"])).hexdigest() == info["sha256"]
+    )
+    assert result["evidencia"]["referencia"] == "referencia ficticia"

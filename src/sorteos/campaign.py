@@ -2,10 +2,12 @@
 
 import hashlib
 import json
+import os
+import secrets
 import sqlite3
 from contextlib import closing
 from dataclasses import asdict
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from sorteos.participants import consolidate
@@ -19,10 +21,24 @@ def canonical(value):
 
 def record(path, name, value):
     path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+    os.close(os.open(path, os.O_CREAT | os.O_WRONLY, 0o600))
     with closing(sqlite3.connect(path)) as db, db:
         db.execute(
             "CREATE TABLE IF NOT EXISTS records(name TEXT PRIMARY KEY, data BLOB NOT NULL)"
         )
+        db.execute("BEGIN IMMEDIATE")
+        if name in ("padron", "compromiso"):
+            other = "compromiso" if name == "padron" else "padron"
+            existing = db.execute(
+                "SELECT data FROM records WHERE name=?", (other,)
+            ).fetchone()
+            if existing:
+                previous = json.loads(existing[0])
+                roster, commitment = (
+                    (value, previous) if name == "padron" else (previous, value)
+                )
+                if roster["rules"]["ends_at"] != commitment["cierre"]:
+                    raise ValueError("El cierre del padrón difiere del compromiso.")
         try:
             db.execute("INSERT INTO records VALUES (?,?)", (name, canonical(value)))
         except sqlite3.IntegrityError:
@@ -92,3 +108,67 @@ def load_rules(path):
     for key in ("starts_at", "ends_at"):
         data[key] = datetime.fromisoformat(data[key].replace("Z", "+00:00"))
     return Rules(**data)
+
+
+def commitment_info(path):
+    if not path.is_file():
+        raise ValueError("Falta la campaña.")
+    with closing(sqlite3.connect(path)) as db:
+        row = db.execute("SELECT data FROM records WHERE name='compromiso'").fetchone()
+    if not row:
+        raise ValueError("Falta el compromiso de la campaña.")
+    return json.loads(row[0])
+
+
+def utc_date(value):
+    stamp = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if stamp.utcoffset() is None:
+        raise ValueError("Indicá una fecha con zona horaria.")
+    return stamp.astimezone(timezone.utc)
+
+
+def commit_seed(path, closing_time):
+    end = utc_date(closing_time)
+    now = datetime.now(timezone.utc)
+    if now >= end:
+        raise ValueError("El compromiso debe generarse antes del cierre.")
+    seed = secrets.token_hex(32)
+    public = {
+        "cierre": end.isoformat(),
+        "creado": now.isoformat(),
+        "sha256": hashlib.sha256(bytes.fromhex(seed)).hexdigest(),
+    }
+    record(path, "compromiso", dict(public, semilla=seed))
+    return public
+
+
+def register_evidence(path, reference, published):
+    info = commitment_info(path)
+    stamp = utc_date(published)
+    if not reference.strip() or not (
+        utc_date(info["creado"]) <= stamp < utc_date(info["cierre"])
+        and stamp <= datetime.now(timezone.utc)
+    ):
+        raise ValueError(
+            "Indicá una referencia y una publicación entre la creación y el cierre, ya ocurrida."
+        )
+    evidence = dict(
+        referencia=reference, publicado=stamp.isoformat(), sha256=info["sha256"]
+    )
+    record(path, "evidencia", evidence)
+    return evidence
+
+
+def reveal(path):
+    info = commitment_info(path)
+    if datetime.now(timezone.utc) < utc_date(info["cierre"]):
+        raise ValueError("La revelación requiere que haya pasado el cierre.")
+    with closing(sqlite3.connect(path)) as db:
+        evidence = db.execute(
+            "SELECT data FROM records WHERE name='evidencia'"
+        ).fetchone()
+    if not evidence:
+        raise ValueError("Falta registrar la evidencia pública.")
+    if hashlib.sha256(bytes.fromhex(info["semilla"])).hexdigest() != info["sha256"]:
+        raise ValueError("La semilla no coincide con el compromiso.")
+    return dict(info, evidencia=json.loads(evidence[0]))
