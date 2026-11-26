@@ -279,3 +279,7 @@ La CLI genera 32 bytes aleatorios por campaña y presenta el hash para publicaci
 ## Incrementos 26–27 — Sorteo y acta verificable (2026-11-26)
 
 Un único commit reúne el ranking y el acta porque el verificador reproduce exactamente ese algoritmo. La semilla tiene longitud fija y el desempate usa el identificador UTF-8. El resultado se registra una vez en la campaña y el HTML contiene los datos para verificarlo sin SQLite. Se comprobó desde la CLI con 100 comentarios sintéticos, dos ganadores y un suplente. Al retirar la base, verify reprodujo el resultado. Cambiar los cupos tras el sorteo o alterar el HTML visible dio error. Pasaron Ruff, formato y 59 pruebas en Python 3.14.3. Para reproducir la prueba del bloque: `uv run --locked pytest tests/test_draw.py`.
+
+## Incrementos 28–29 — Preparar la campaña en Streamlit (2026-11-26)
+
+La pantalla local usa la misma consolidación de participantes y validación de reglas que la CLI. El formulario aplica los cambios juntos. La consulta a Graph se hace al cargar la cuenta y conserva el catálogo en la sesión. El borrador descargable reúne las publicaciones seleccionadas y las reglas; las fechas de la interfaz incluyen cada día completo en UTC. Con AppTest se evaluaron los 100 comentarios ficticios, se rechazó una selección vacía y se comprobó que editar la campaña conserva el catálogo sin repetir peticiones. Otra prueba simuló una cuenta sin publicaciones. Pasaron Ruff, formato y 62 pruebas en Python 3.14.3. El acceso real con una cuenta autorizada sigue pendiente.

@@ -3,6 +3,21 @@
 Herramienta en construcción para operar sorteos de pequeñas cuentas y negocios
 locales desde la computadora del operador.
 
+## Preparar una campaña desde el navegador
+
+Desde la raíz del proyecto, ejecutá `make ui` y abrí la dirección local indicada
+en la terminal. La interfaz escucha en `127.0.0.1`. En **Campaña de prueba**,
+seleccioná publicaciones, ajustá las reglas y pulsá **Aplicar configuración**.
+La vista previa evalúa los comentarios sintéticos con el motor de la CLI.
+
+En **Cuenta autorizada**, indicá la versión de API de tu panel y pulsá **Cargar
+cuenta**. Se usa la credencial del entorno o de la cuenta cifrada local. Elegí
+una o varias publicaciones entre las primeras diez devueltas por Meta. Las
+fechas comprenden días completos en UTC. Al aplicar las reglas podés descargar
+el borrador JSON con la cuenta, las publicaciones, la identidad y las reglas.
+El borrador se conserva durante la sesión de Streamlit. La extracción desde la
+interfaz corresponde al incremento 30.
+
 ## Estado actual
 
 La CLI local permite comprobar el perfil autorizado y tomar muestras de publicaciones, comentarios y respuestas. La guía de cuenta de prueba
@@ -41,8 +56,8 @@ Sin Make, los comandos equivalentes son:
 
 ```bash
 uv sync --locked
-uv run --locked ruff check src tests scripts
-uv run --locked ruff format --check src tests scripts
+uv run --locked ruff check src tests scripts app
+uv run --locked ruff format --check src tests scripts app
 uv run --locked pytest
 ```
 
