@@ -275,3 +275,7 @@ Una base SQLite por campaña conserva en una transacción las reglas normalizada
 ## Incremento 25 — Compromiso y revelación (2026-11-26)
 
 La CLI genera 32 bytes aleatorios por campaña y presenta el hash para publicación previa. La evidencia conserva la referencia pública y el instante declarado por el operador. Se verifica la ventana temporal y la coincidencia de cierres entre padrón y compromiso. La revelación requiere evidencia y cierre alcanzado. La prueba usó un reloj controlado y reprodujo el hash desde la semilla revelada. Pasaron Ruff, formato y 57 pruebas locales. La autenticidad de la referencia pública queda a cargo de la verificación externa.
+
+## Incrementos 26–27 — Sorteo y acta verificable (2026-11-26)
+
+Un único commit reúne el ranking y el acta porque el verificador reproduce exactamente ese algoritmo. La semilla tiene longitud fija y el desempate usa el identificador UTF-8. El resultado se registra una vez en la campaña y el HTML contiene los datos para verificarlo sin SQLite. Se comprobó desde la CLI con 100 comentarios sintéticos, dos ganadores y un suplente. Al retirar la base, verify reprodujo el resultado. Cambiar los cupos tras el sorteo o alterar el HTML visible dio error. Pasaron Ruff, formato y 59 pruebas en Python 3.14.3. Para reproducir la prueba del bloque: `uv run --locked pytest tests/test_draw.py`.

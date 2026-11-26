@@ -213,3 +213,18 @@ Tras el cierre y el registro de la publicación, `revelar` muestra la semilla
 hexadecimal. Su compromiso es SHA-256 de los 32 bytes obtenidos al decodificar
 ese hexadecimal. Compartí la revelación cuando corresponda y mantené la base
 SQLite local, ya que contiene el padrón y la semilla en claro.
+
+## Sortear y verificar el acta
+
+Al ejecutar el sorteo, indicá las cantidades de ganadores y suplentes acordadas en las bases. La selección usa el padrón congelado y la semilla revelada. El ejemplo selecciona un ganador y dos suplentes.
+
+```bash
+uv run --locked python -m sorteos sortear exports/campana.db exports/acta.html --ganadores 1 --suplentes 2
+uv run --locked python -m sorteos verify exports/acta.html
+```
+
+Abrí el HTML en un navegador para imprimirlo o guardarlo como PDF. Conservá el HTML original para verificarlo. Incluye las identidades elegibles, el orden de finalistas y la semilla revelada. Considerá ese alcance al compartir el archivo.
+
+El algoritmo v1 ordena cada identidad por SHA-256 de la concatenación de la semilla (32 bytes) y el identificador UTF-8 exacto. En caso de empate usa los bytes del identificador en orden ascendente. Asigna primero los ganadores y después los suplentes. La base conserva el resultado y permite volver a exportarlo con los mismos cupos.
+
+Un tercero con esta versión de la herramienta puede ejecutar `verify` sobre el archivo recibido. El comando comprueba el compromiso, la cronología declarada, el ranking y el HTML visible. Para autenticar la copia, agregá `--sha256 HUELLA` con el valor que imprimió el organizador y que conservaste por un canal independiente. Contrastá el compromiso y la fecha con su publicación original. La auditoría de la elegibilidad requiere además el padrón congelado y el snapshot identificados en el acta.

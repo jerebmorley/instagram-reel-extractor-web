@@ -10,9 +10,11 @@ from pathlib import Path
 
 from sorteos.campaign import commit_seed, freeze, load_rules, register_evidence, reveal
 from sorteos.credentials import CredentialError, credential_path, load_token, save_token
+from sorteos.draw import draw
 from sorteos.graph import Graph, GraphError
 from sorteos.graph_source import GraphSource
 from sorteos.jobs import run_snapshot
+from sorteos.report import export, verify
 from sorteos.sources import FileSource, FixtureSource
 
 
@@ -69,7 +71,35 @@ def main():
     evidence.add_argument("--publicado", required=True)
     disclose = commands.add_parser("revelar", help="Revelar la semilla tras el cierre")
     disclose.add_argument("campana", type=Path)
+    sortear = commands.add_parser(
+        "sortear", help="Sortear y exportar el acta imprimible"
+    )
+    sortear.add_argument("campana", type=Path)
+    sortear.add_argument("acta", type=Path)
+    sortear.add_argument("--ganadores", required=True, type=int)
+    sortear.add_argument("--suplentes", type=int, default=0)
+    check = commands.add_parser("verify", help="Reproducir un acta local")
+    check.add_argument("acta", type=Path)
+    check.add_argument("--sha256", help="Huella conservada por separado")
     args = parser.parse_args()
+    if args.command in ("sortear", "verify"):
+        try:
+            if args.command == "sortear":
+                data = draw(args.campana, args.ganadores, args.suplentes)
+                result = {"sha256": export(data, args.acta), **data["resultado"]}
+            else:
+                result = verify(args.acta, args.sha256)
+        except (
+            ValueError,
+            OSError,
+            sqlite3.Error,
+            TypeError,
+            KeyError,
+            AttributeError,
+        ) as error:
+            parser.exit(1, f"Acta: {error}\n")
+        print(json.dumps(result))
+        return
     if args.command in ("comprometer", "registrar-publicacion", "revelar"):
         try:
             if args.command == "comprometer":
