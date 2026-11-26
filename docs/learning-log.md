@@ -316,3 +316,7 @@ La guía vincula autorización, reglas, acceso, retención y evidencia de cierre
 ## Incremento 38 — Limpieza por retención
 
 El plazo se cuenta desde el cierre en UTC. La vista previa distingue campañas vigentes, vencidas y carpetas sin configuración verificable. Para borrar se indica un ID concreto y se vuelve a verificar el vencimiento. Un traslado dentro del mismo directorio permite reanudar una eliminación interrumpida. Probamos con carpetas temporales que una campaña vigente, una configuración alterada y una extracción activa impiden borrar, y que borrar una vencida conserva las demás y el destino externo de un enlace.
+
+## Incremento 40 — Instalación y demo sintética
+
+El README abre con el recorrido desde una copia limpia hasta el acta verificada. Instalamos el paquete con make install en un entorno nuevo de Python 3.14.3. Pasaron Ruff, formato y las 68 pruebas. Repetimos la prueba de interfaz en esa copia y ejecutamos verify sobre el HTML producido. El GIF ilustra los pasos con datos de esa ejecución. Falta que otra persona siga las instrucciones y registre el resultado para cerrar el criterio de uso independiente.

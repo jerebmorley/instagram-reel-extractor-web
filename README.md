@@ -3,6 +3,28 @@
 Herramienta en construcción para operar sorteos de pequeñas cuentas y negocios
 locales desde la computadora del operador.
 
+## Instalar y completar la demo
+
+En Linux o WSL con Python 3.10 o posterior, uv, Git y Make, abrí una terminal y ejecutá:
+
+```bash
+git clone https://github.com/jerebmorley/instagram-reel-extractor-web.git
+cd instagram-reel-extractor-web
+make install
+make ui
+```
+
+1. Abrí la dirección local indicada. Elegí **Campaña de prueba**, conservá los valores iniciales y pulsá **Aplicar configuración**.
+2. Pulsá **Preparar compromiso de prueba**, **Iniciar extracción** y **Actualizar progreso**. Al terminar verás 100 comentarios ficticios entre tres publicaciones.
+3. Revisá los descartes y pulsá **Congelar padrón**. Elegí un ganador y un suplente y pulsá **Realizar sorteo**.
+4. Descargá el acta HTML y el CSV. En **Ver historial de sorteos** recuperá la campaña y compará la huella. Para verificar el HTML descargado en otra terminal usá el comando siguiente, sustituyendo la ruta por la de tu descarga.
+
+```bash
+uv run --locked python -m sorteos verify /ruta/al/acta.html
+```
+
+![Recorrido de la demo sintética desde la extracción hasta la verificación del acta](docs/demo.gif)
+
 ## Preparar una campaña desde el navegador
 
 Desde la raíz del proyecto, ejecutá `make ui` y abrí la dirección local indicada
@@ -32,17 +54,7 @@ La revisión corresponde al snapshot combinado de esa configuración.
 
 ## Estado actual
 
-La CLI local permite comprobar el perfil autorizado y tomar muestras de publicaciones, comentarios y respuestas. La guía de cuenta de prueba
-detalla los comandos y la evidencia pendiente de obtener con Meta.
-
-## Alcance previsto
-
-- Operación local asistida, sin hosting, cuentas de usuario ni pagos.
-- Núcleo Python compartido por CLI y Streamlit, con SQLite para persistencia.
-- Extracción reanudable, reglas de participación y revisión con registro.
-- Sorteo reproducible, acta verificable y exportación de resultados.
-
-Estas capacidades son objetivos del roadmap, no funciones ya disponibles.
+La demo sintética recorre la extracción, revisión, sorteo y verificación con SQLite local. La lectura de Instagram requiere una cuenta profesional autorizada y una comprobación real de los permisos y campos. La guía del piloto reúne las bases, la autorización y el procedimiento de cierre. [Preparar el piloto](docs/piloto.md)
 
 ## Preparar el entorno de desarrollo
 
@@ -62,7 +74,7 @@ activar el entorno: `uv run` elige su intérprete.
 `make test` ejecuta Ruff para detectar errores e imports desordenados, comprueba
 el formato sin modificar archivos y ejecuta pytest. La prueba inicial importa el
 paquete desde una carpeta temporal, con Python aislado de `PYTHONPATH` y del
-directorio actual. Comprueba la instalación; no valida reglas de sorteos todavía.
+directorio actual. El resto de la suite cubre reglas, extracción reanudable, sorteo, retención y el recorrido de la interfaz.
 
 Sin Make, los comandos equivalentes son:
 
