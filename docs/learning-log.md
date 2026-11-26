@@ -283,3 +283,9 @@ Un único commit reúne el ranking y el acta porque el verificador reproduce exa
 ## Incrementos 28–29 — Preparar la campaña en Streamlit (2026-11-26)
 
 La pantalla local usa la misma consolidación de participantes y validación de reglas que la CLI. El formulario aplica los cambios juntos. La consulta a Graph se hace al cargar la cuenta y conserva el catálogo en la sesión. El borrador descargable reúne las publicaciones seleccionadas y las reglas; las fechas de la interfaz incluyen cada día completo en UTC. Con AppTest se evaluaron los 100 comentarios ficticios, se rechazó una selección vacía y se comprobó que editar la campaña conserva el catálogo sin repetir peticiones. Otra prueba simuló una cuenta sin publicaciones. Pasaron Ruff, formato y 62 pruebas en Python 3.14.3. El acceso real con una cuenta autorizada sigue pendiente.
+
+## Incrementos 30–31 — Extracción y revisión desde Streamlit (2026-11-26)
+
+Cada configuración tiene su carpeta local. Un bloqueo heredado por el subproceso evita lanzamientos simultáneos. La pantalla consulta el progreso de SQLite y el trabajador reúne los snapshots verificados de las publicaciones seleccionadas. Un texto idéntico repetido por una cuenta dispara una alerta informativa. Las inclusiones y exclusiones manuales se registran por identidad con fecha UTC y motivo. Una corrección agrega una fila y la exportación usa la última decisión.
+
+La prueba AppTest inició el trabajador real en una carpeta temporal, comprobó tres trabajos y cien comentarios, volvió a cargar la pantalla y verificó que un segundo lanzamiento conservaba los trabajos. También registró una excepción desde la pantalla y verificó el historial tras corregirla. Pasaron Ruff, formato y 63 pruebas con Python 3.14.3. El recorrido con una cuenta real de Instagram queda pendiente.

@@ -45,7 +45,7 @@ def record(path, name, value):
             raise ValueError(f"El registro {name} ya existe en esta campaña.") from None
 
 
-def freeze(database: Path, snapshot: Path, rules: Rules, identity, reviews):
+def read_snapshot(snapshot):
     raw = snapshot.read_bytes()
     digest = hashlib.sha256(raw).hexdigest()
     if snapshot.name != f"{digest}.jsonl":
@@ -54,6 +54,11 @@ def freeze(database: Path, snapshot: Path, rules: Rules, identity, reviews):
         parse_row(json.loads(line), i, csv_input=False)
         for i, line in enumerate(raw.splitlines(), 1)
     ]
+    return digest, comments
+
+
+def freeze(database: Path, snapshot: Path, rules: Rules, identity, reviews):
+    digest, comments = read_snapshot(snapshot)
     decisions = consolidate(comments, rules, identity=identity)
     known = {d.participant for d in decisions if d.participant is not None}
     eligible = {d.participant for d in decisions if d.grants_entry}
@@ -102,9 +107,13 @@ def freeze(database: Path, snapshot: Path, rules: Rules, identity, reviews):
 
 
 def load_rules(path):
-    data = json.loads(path.read_text(encoding="utf-8"))
+    return parse_rules(json.loads(path.read_text(encoding="utf-8")))
+
+
+def parse_rules(data):
     if not isinstance(data, dict):
         raise ValueError("Se esperaba un objeto de reglas.")
+    data = dict(data)
     for key in ("starts_at", "ends_at"):
         data[key] = datetime.fromisoformat(data[key].replace("Z", "+00:00"))
     return Rules(**data)

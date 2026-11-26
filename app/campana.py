@@ -5,6 +5,7 @@ import os
 from datetime import date, datetime, time, timedelta, timezone
 
 import streamlit as st
+from extraccion import render_extraction
 
 from sorteos.credentials import CredentialError, credential_path, load_token
 from sorteos.fixtures import fixture_rules, synthetic_comments
@@ -158,6 +159,8 @@ def main():
             "campana.json",
             "application/json",
         )
+
+        render_extraction(draft)
 
 
 main()

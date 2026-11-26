@@ -15,8 +15,20 @@ cuenta**. Se usa la credencial del entorno o de la cuenta cifrada local. Elegí
 una o varias publicaciones entre las primeras diez devueltas por Meta. Las
 fechas comprenden días completos en UTC. Al aplicar las reglas podés descargar
 el borrador JSON con la cuenta, las publicaciones, la identidad y las reglas.
-El borrador se conserva durante la sesión de Streamlit. La extracción desde la
-interfaz corresponde al incremento 30.
+Pulsá **Iniciar extracción** y después **Actualizar progreso** para ver el estado
+y los registros leídos por publicación. El subproceso continúa si se cierra la
+pestaña. Al aplicar la misma configuración desde el mismo proyecto se recupera
+el trabajo bajo `exports/interfaz/`. **Continuar extracción** retoma las páginas
+pendientes tras una interrupción. Cada ejecución para una cuenta real comparte
+el presupuesto de consultas entre las publicaciones elegidas.
+
+Al finalizar, elegí **Descartados**, **Con alerta** o **Todos**. La alerta señala
+texto idéntico repetido por una cuenta en varios comentarios. Revisá el contexto
+antes de decidir. Para aplicar una excepción seleccioná un participante, indicá
+la decisión y escribí el motivo. El historial conserva las correcciones y su hora
+UTC. **Descargar revisiones vigentes** genera el JSON que acepta
+`congelar --revisiones`, con la decisión más reciente por identidad.
+La revisión corresponde al snapshot combinado de esa configuración.
 
 ## Estado actual
 
