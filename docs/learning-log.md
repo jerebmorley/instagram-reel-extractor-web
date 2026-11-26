@@ -308,3 +308,7 @@ estados de cobertura. La referencia por publicación conserva la fecha de lectur
 para poder interpretar una diferencia. Pasaron Ruff, formato y 66 pruebas locales
 con Python 3.14.3. El acceso con una cuenta real y las dos sesiones observadas
 del incremento 33 siguen pendientes.
+
+## Incremento 37 — Preparación del piloto
+
+La guía vincula autorización, reglas, acceso, retención y evidencia de cierre. Revisamos el modelo contra el flujo local y el texto actualizado de la Ley 25.326. El enlace de Meta remitió a inicio de sesión. La jurisdicción, las bases definitivas y los permisos efectivos requieren confirmación con el comercio. La ficha del 39 queda preparada para registrar hechos después del piloto.
