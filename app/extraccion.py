@@ -2,10 +2,11 @@
 
 import json
 import sqlite3
+from datetime import datetime, timezone
 
 import streamlit as st
 
-from sorteos.campaign import read_snapshot
+from sorteos.campaign import milestones, read_snapshot, utc_date
 from sorteos.extraction import job_rows, launch, running, workspace
 from sorteos.review import add_review, effective_reviews, history, inspection
 
@@ -16,6 +17,14 @@ def extraction_panel(draft):
     finished = directory / "resultado"
     busy = running(directory)
     jobs = job_rows(directory)
+    if (
+        draft["origen"] == "Cuenta autorizada"
+        and not jobs
+        and not busy
+        and datetime.now(timezone.utc) < utc_date(draft["reglas"]["ends_at"])
+    ):
+        st.info("La extracción para el sorteo estará disponible después del cierre.")
+        return
     if not finished.exists():
         if busy:
             st.info("Extracción en curso.")
@@ -61,7 +70,7 @@ def extraction_panel(draft):
     else:
         st.info("No hay comentarios en esta vista.")
     known = sorted({r["participante"] for r in rows if r["participante"]})
-    if known:
+    if known and "padron" not in milestones(directory / "campana.db"):
         with st.form(f"revision-{directory.name}", clear_on_submit=True):
             person = st.selectbox("Participante", known)
             action = st.radio(

@@ -6,6 +6,7 @@ from datetime import date, datetime, time, timedelta, timezone
 
 import streamlit as st
 from extraccion import render_extraction
+from sorteo import draw_panel, guarded, show_history
 
 from sorteos.credentials import CredentialError, credential_path, load_token
 from sorteos.fixtures import fixture_rules, synthetic_comments
@@ -25,6 +26,9 @@ def clear_account():
 
 def main():
     st.set_page_config(page_title="Preparar sorteo", layout="centered")
+    if st.sidebar.checkbox("Ver historial de sorteos"):
+        guarded(show_history)
+        return
     st.title("Preparar sorteo")
     mode = st.radio(
         "Origen de los comentarios",
@@ -161,6 +165,7 @@ def main():
         )
 
         render_extraction(draft)
+        guarded(draw_panel, draft)
 
 
 main()

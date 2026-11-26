@@ -181,3 +181,19 @@ def reveal(path):
     if hashlib.sha256(bytes.fromhex(info["semilla"])).hexdigest() != info["sha256"]:
         raise ValueError("La semilla no coincide con el compromiso.")
     return dict(info, evidencia=json.loads(evidence[0]))
+
+
+def milestones(path):
+    """Devolver los nombres de los hitos persistidos de la campaña."""
+    if not path.is_file():
+        return set()
+    with closing(sqlite3.connect(path)) as db:
+        return {row[0] for row in db.execute("SELECT name FROM records")}
+
+
+def read_record(path, name):
+    with closing(sqlite3.connect(path)) as db:
+        row = db.execute("SELECT data FROM records WHERE name=?", (name,)).fetchone()
+    if not row:
+        raise ValueError("Falta el registro de campaña solicitado.")
+    return json.loads(row[0])

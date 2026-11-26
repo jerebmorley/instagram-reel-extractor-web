@@ -255,3 +255,11 @@ Abrí el HTML en un navegador para imprimirlo o guardarlo como PDF. Conservá el
 El algoritmo v1 ordena cada identidad por SHA-256 de la concatenación de la semilla (32 bytes) y el identificador UTF-8 exacto. En caso de empate usa los bytes del identificador en orden ascendente. Asigna primero los ganadores y después los suplentes. La base conserva el resultado y permite volver a exportarlo con los mismos cupos.
 
 Un tercero con esta versión de la herramienta puede ejecutar `verify` sobre el archivo recibido. El comando comprueba el compromiso, la cronología declarada, el ranking y el HTML visible. Para autenticar la copia, agregá `--sha256 HUELLA` con el valor que imprimió el organizador y que conservaste por un canal independiente. Contrastá el compromiso y la fecha con su publicación original. La auditoría de la elegibilidad requiere además el padrón congelado y el snapshot identificados en el acta.
+
+## Finalizar una campaña desde Streamlit
+
+En **Campaña de prueba**, aplicá la configuración inicial y pulsá **Preparar compromiso de prueba**. La demo usa datos de enero de 2026 y una referencia pública ficticia que se identifica como tal en el acta.
+
+Para una **Cuenta autorizada**, generá el compromiso antes del cierre, publicá la huella y registrá la referencia y el instante real de publicación. Tras el cierre, extraé la publicación completa y revisá los participantes. **Congelar padrón** fija las últimas decisiones manuales. Elegí los cupos y pulsá **Realizar sorteo**. El resultado y el acta quedan en la carpeta de la campaña. **Ver historial de sorteos** permite recuperar el HTML y su huella en otra sesión desde el mismo proyecto.
+
+La preparación del paso 33 está en el [guion de prueba de uso](docs/prueba-de-uso.md).

@@ -45,3 +45,39 @@ def synthetic_comments(count: int, seed: int) -> list[Comment]:
             )
         )
     return result
+
+
+def prepare_demo_commitment(database, draft):
+    """Cronología ficticia para ejercitar el sorteo con la muestra histórica."""
+    import hashlib
+
+    from sorteos.campaign import milestones, parse_rules, record
+
+    if draft["origen"] != "Campaña de prueba" or draft["cuenta"]["id"] != "demo":
+        raise ValueError("La simulación requiere una campaña de prueba.")
+    rules = parse_rules(draft["reglas"])
+    created = (rules.starts_at - timedelta(minutes=1)).isoformat()
+    seed = bytes(range(32))
+    digest = hashlib.sha256(seed).hexdigest()
+    stages = milestones(database)
+    if "compromiso" not in stages:
+        record(
+            database,
+            "compromiso",
+            dict(
+                creado=created,
+                cierre=rules.ends_at.isoformat(),
+                sha256=digest,
+                semilla=seed.hex(),
+            ),
+        )
+    if "evidencia" not in stages:
+        record(
+            database,
+            "evidencia",
+            dict(
+                sha256=digest,
+                publicado=created,
+                referencia="DEMOSTRACIÓN SINTÉTICA · publicación simulada",
+            ),
+        )
